@@ -3,4 +3,6 @@
 
 void hello(void);
 
+void test(void);
+
 #endif // F401_RE_HAL_LIBRARY_H
