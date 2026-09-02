@@ -1,0 +1,16 @@
+﻿//
+// Created by tomly on 02/09/2026.
+//
+
+#ifndef F401_RE_HAL_RCC_INTERNAL_H
+#define F401_RE_HAL_RCC_INTERNAL_H
+
+#define RCC_BASE_ADDR (0x40023800U)
+
+#define RCC_AHB1_ENABLER_OFFSET (0x30U)
+
+#define RCC_REGISTER_ADDR(reg) ((volatile uint32_t *)((RCC_BASE_ADDR) + (reg)))
+
+#define RCC_AHB1_ENABLER (RCC_REGISTER_ADDR(RCC_AHB1_ENABLER_OFFSET))
+
+#endif // F401_RE_HAL_RCC_INTERNAL_H
