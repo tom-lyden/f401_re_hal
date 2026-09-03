@@ -3,14 +3,17 @@ project(f401_re_hal C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_library(f401_re_hal STATIC src/f401-re-hal.c
-        src/gpio
-        src/rcc
+add_library(f401_re_hal STATIC
+        src/gpio/gpio.c
+        src/rcc/rcc.c
 )
 
-target_include_directories(f401_re_hal PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
+target_include_directories(f401_re_hal 
+        PUBLIC
+        include
         
+        PRIVATE
         include/gpio
+        include/mmio
         include/rcc
 )

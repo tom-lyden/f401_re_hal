@@ -5,6 +5,8 @@
 #ifndef F401_RE_HAL_GPIO_H
 #define F401_RE_HAL_GPIO_H
 
+#include <stdint.h>
+
 typedef enum
 {
 	GPIO_PORT_A = 0,
@@ -88,12 +90,6 @@ typedef enum
 
 typedef enum
 {
-	GPIO_UNLOCKED = 0,
-	GPIO_LOCKED = 1,
-} gpio_lock_t;
-
-typedef enum
-{
 	GPIO_STATE_LOW = 0,
 	GPIO_STATE_HIGH = 1,
 } gpio_state_t;
@@ -102,15 +98,14 @@ typedef struct
 {
 	gpio_mode_t mode;
 	gpio_type_t type;
-	gpio_speed_t speed;
+	gpio_speed_t ospeed;
 	gpio_pupd_t pupd;
 	gpio_af_t af;
-	gpio_lock_t lock;
 } gpio_config_t;
 
 // Configuration
 void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_config_t* cfg);
-void GPIO_Lock(gpio_port_t port, gpio_pin_t pin);
+void GPIO_Lock(gpio_port_t port, uint32_t pin_mask);
 
 // Usage
 void GPIO_Write(gpio_port_t port, gpio_pin_t pin, gpio_state_t state);

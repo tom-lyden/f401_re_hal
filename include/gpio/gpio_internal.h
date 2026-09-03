@@ -5,33 +5,38 @@
 #ifndef F401_RE_HAL_GPIO_INTERNAL_H
 #define F401_RE_HAL_GPIO_INTERNAL_H
 
-#define GPIO_BASE_ADDR (0x40020000UL)
-#define GPIO_PORT_WIDTH (0x0400UL)
+#include <stdint.h>
 
-#define GPIOx_MODER_OFFSET	 (0x00UL)
-#define GPIOx_OTYPER_OFFSET	 (0x04UL)
-#define GPIOx_OSPEEDR_OFFSET (0x08UL)
-#define GPIOx_PUPDR_OFFSET	 (0x0CUL)
-#define GPIOx_IDR_OFFSET	 (0x10UL)
-#define GPIOx_ODR_OFFSET	 (0x14UL)
-#define GPIOx_BSRR_OFFSET	 (0x18UL)
-#define GPIOx_LCKR_OFFSET	 (0x1CUL)
-#define GPIOx_AFRL_OFFSET	 (0x20UL)
-#define GPIOx_AFRH_OFFSET	 (0x24UL)
+#define GPIO_BASE_ADDR (0x40020000U)
+#define GPIO_PORT_WIDTH (0x0400U)
 
-#define GPIO_PORT_ADDR(port) ((GPIO_BASE_ADDR) + ((port) * (GPIO_PORT_WIDTH)))
-#define GPIO_REGISTER_ADDR(port, reg) ((GPIO_PORT_ADDR((port))) + (reg))
+#define GPIO_PORT_ADDR(port) ((volatile gpio_t *)((GPIO_BASE_ADDR) + ((port) * (GPIO_PORT_WIDTH))))
 
-#define GPIO_MODER_ADDR(port) 		(GPIO_REGISTER_ADDR((port), (GPIOx_MODER_OFFSET)))
-#define GPIO_OTYPER_ADDR(port)	 	(GPIO_REGISTER_ADDR((port), (GPIOx_OTYPER_OFFSET)))
-#define GPIO_OSPEEDR_ADDR(port) 	(GPIO_REGISTER_ADDR((port), (GPIOx_OSPEEDR_OFFSET)))
-#define GPIO_PUPDR_ADDR(port) 		(GPIO_REGISTER_ADDR((port), (GPIOx_PUPDR_OFFSET)))
-#define GPIO_IDR_ADDR(port) 		(GPIO_REGISTER_ADDR((port), (GPIOx_IDR_OFFSET)))
-#define GPIO_ODR_ADDR(port) 		(GPIO_REGISTER_ADDR((port), (GPIOx_ODR_OFFSET)))
-#define GPIO_BSRR_ADDR(port) 		(GPIO_REGISTER_ADDR((port), (GPIOx_BSRR_OFFSET)))
-#define GPIO_LCKR_ADDR(port) 		(GPIO_REGISTER_ADDR((port), (GPIOx_LCKR_OFFSET)))
-#define GPIO_AFRL_ADDR(port) 		(GPIO_REGISTER_ADDR((port), (GPIOx_AFRL_OFFSET)))
-#define GPIO_AFRH_ADDR(port) 		(GPIO_REGISTER_ADDR((port), (GPIOx_AFRH_OFFSET)))
+#define GPIO_LCKK_BIT (16)
+
+#define GPIO_MODE_WIDTH (2)
+#define GPIO_TYPE_WIDTH (1)
+#define GPIO_OSPEED_WIDTH (2)
+#define GPIO_PUPD_WIDTH (2)
+#define GPIO_ODR_WIDTH (1)
+#define GPIO_AFR_WIDTH (4)
+
+#define GPIO_AFR_FIELDS_PER_REG (8)
+
+#define GPIO_BSRR_BR0_OFFSET (16)
+
+typedef struct gpio
+{
+	uint32_t MODER;
+	uint32_t TYPER;
+	uint32_t OSPEEDR;
+	uint32_t PUPDR;
+	uint32_t IDR;
+	uint32_t ODR;
+	uint32_t BSRR;
+	uint32_t LCKR;
+	uint32_t AFR[2];
+} gpio_t;
 
 
 #endif // F401_RE_HAL_GPIO_INTERNAL_H

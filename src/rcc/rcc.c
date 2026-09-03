@@ -4,11 +4,10 @@
 
 #include <rcc-internal.h>
 #include <rcc.h>
-#include <stdint.h>
 
 void RCC_EnableGPIO(rcc_en_gpio_port_t port)
 {
-	volatile uint32_t* rcc_enable_reg = RCC_AHB1_ENABLER;
+	volatile rcc_t* rcc = RCC_BASE;
 	
-	*rcc_enable_reg |= 1U << port;
+	rcc->AHB1ENR |= 1U << port;
 }
