@@ -6,6 +6,7 @@ set(CMAKE_C_STANDARD 23)
 add_library(f401_re_hal STATIC
         src/gpio/gpio.c
         src/rcc/rcc.c
+        src/systick/systick.c
 )
 
 target_include_directories(f401_re_hal 
@@ -16,4 +17,5 @@ target_include_directories(f401_re_hal
         include/gpio
         include/mmio
         include/rcc
+        include/systick
 )

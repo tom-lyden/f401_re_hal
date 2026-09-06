@@ -19,5 +19,6 @@ typedef enum
 } rcc_en_gpio_port_t;
 
 void RCC_EnableGPIO(rcc_en_gpio_port_t port);
+uint32_t RCC_GetHCLK(void);
 
 #endif // F401_RE_HAL_RCC_H

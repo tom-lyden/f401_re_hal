@@ -7,8 +7,38 @@
 
 #include <stdint.h>
 
+#define HSI_FREQ_HZ (16000000U)
+
 #define RCC_BASE_ADDR (0x40023800U)
 #define RCC_BASE ((volatile rcc_t *)(RCC_BASE_ADDR))
+
+#define RCC_CFG_SWS_OFFSET (2)
+#define RCC_CFG_SWS_WIDTH (2)
+#define RCC_CFG_HPRE_OFFSET (4)
+#define RCC_CFG_HPRE_WIDTH (4)
+
+typedef enum
+{
+	SYSCLK_HSI = 0,
+	SYSCLK_HSE = 1,
+	SYSCLK_PLL = 2,
+} sysclk_t;
+
+typedef enum
+{
+	AHB_DIV_1 = 0,
+	
+	// No division for any number 1-7
+	
+	AHB_DIV_2 = 8,
+	AHB_DIV_4 = 9,
+	AHB_DIV_8 = 10,
+	AHB_DIV_16 = 11,
+	AHB_DIV_64 = 12,
+	AHB_DIV_128 = 13,
+	AHB_DIV_256 = 14,
+	AHB_DIV_512 = 15,
+} ahb_scaling_t;
 
 typedef struct rcc
 {
