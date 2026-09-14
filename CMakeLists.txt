@@ -7,6 +7,7 @@ add_library(f401_re_hal STATIC
         src/gpio/gpio.c
         src/rcc/rcc.c
         src/systick/systick.c
+        src/exti/exti.c
 )
 
 target_include_directories(f401_re_hal 
@@ -18,4 +19,5 @@ target_include_directories(f401_re_hal
         include/mmio
         include/rcc
         include/systick
+        include/exti
 )
