@@ -1,7 +1,7 @@
 ﻿cmake_minimum_required(VERSION 4.3)
 project(f401_re_hal C)
 
-set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD 11)
 
 add_library(f401_re_hal STATIC
         src/gpio/gpio.c

@@ -10,4 +10,4 @@
 
 bool_t SYSCFG_BindEXTILine(exti_line_t line, gpio_port_t port);
 
-#endif //F401_RE_HAL_SYSCFG_H
+#endif // F401_RE_HAL_SYSCFG_H

@@ -5,6 +5,8 @@
 #ifndef F401_RE_HAL_RCC_H
 #define F401_RE_HAL_RCC_H
 
+#include <stdint.h>
+
 typedef enum
 {
 	RCC_EN_GPIO_PORT_A = 0,

@@ -6,6 +6,7 @@
 #include <gpio_internal.h>
 #include <mmio.h>
 #include <rcc.h>
+#include <exti.h>
 #include <syscfg.h>
 
 #define GPIO_AFR_REG(pin) ((pin) / (GPIO_AFR_FIELDS_PER_REG))
@@ -40,7 +41,7 @@ void GPIO_Lock(gpio_port_t port, uint32_t pin_mask)
 	(void)gpio->LCKR; // read to complete lock sequence, value unused
 }
 
-bool_t GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, gpio_interrupt_cfg_t* cfg)
+bool_t GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interrupt_cfg_t* cfg)
 {
 	exti_line_t line = get_exti_line(pin);	
 	
@@ -64,7 +65,7 @@ void GPIO_Write(gpio_port_t port, gpio_pin_t pin, gpio_state_t state)
 {
 	volatile gpio_t* gpio = GPIO_PORT_ADDR(port);
 	
-	gpio->BSRR = (1U << pin) << (!state * GPIO_BSRR_BR0_OFFSET);
+	gpio->BSRR = (1U << pin) << (state ? 0 : GPIO_BSRR_BR0_OFFSET);
 }
 
 void GPIO_Toggle(gpio_port_t port, gpio_pin_t pin) 

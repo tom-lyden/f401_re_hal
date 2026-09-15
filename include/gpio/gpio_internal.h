@@ -25,7 +25,7 @@
 
 #define GPIO_BSRR_BR0_OFFSET (16)
 
-typedef struct gpio
+typedef struct
 {
 	uint32_t MODER;
 	uint32_t TYPER;

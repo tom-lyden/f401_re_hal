@@ -20,4 +20,4 @@ typedef struct
     uint32_t PR;
 } exti_t;
 
-#endif //F401_RE_HAL_EXTI_INTERNAL_H
+#endif // F401_RE_HAL_EXTI_INTERNAL_H

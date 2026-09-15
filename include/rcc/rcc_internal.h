@@ -42,7 +42,7 @@ typedef enum
 	AHB_DIV_512 = 15,
 } ahb_scaling_t;
 
-typedef struct rcc
+typedef struct
 {
 	uint32_t CR;
 	uint32_t PLLCFGR;

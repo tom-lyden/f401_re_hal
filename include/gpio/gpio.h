@@ -124,7 +124,7 @@ typedef struct
 void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_config_t* cfg);
 void GPIO_Lock(gpio_port_t port, uint32_t pin_mask);
 
-bool_t GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, gpio_interrupt_cfg_t* cfg);
+bool_t GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interrupt_cfg_t* cfg);
 
 // Usage
 void GPIO_Write(gpio_port_t port, gpio_pin_t pin, gpio_state_t state);

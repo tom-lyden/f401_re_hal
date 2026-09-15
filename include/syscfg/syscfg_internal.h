@@ -21,4 +21,4 @@ typedef struct
     uint32_t CMPCR;
 } syscfg_t;
 
-#endif //F401_RE_HAL_SYSCFG_INTERNAL_H
+#endif // F401_RE_HAL_SYSCFG_INTERNAL_H

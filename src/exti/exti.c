@@ -41,7 +41,6 @@ void EXTI_ConfigureInterrupt(const exti_trigger_cfg_t* cfg)
     MMIO_WriteField(&exti->IMR, cfg->line, 1, 1);
 }
 
-// NVIC Implementations
 void EXTI0_IRQHandler(void)
 {
     handle_irq_num(EXTI_LINE_0);

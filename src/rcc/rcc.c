@@ -2,7 +2,7 @@
 // Created by tomly on 02/09/2026.
 //
 
-#include <rcc-internal.h>
+#include <rcc_internal.h>
 #include <rcc.h>
 #include <mmio.h>
 

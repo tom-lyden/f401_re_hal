@@ -14,7 +14,7 @@ typedef enum
 	SYSTICK_CLK_SRC_AHB = 1,
 } systick_clk_src_t;
 
-typedef struct systick_cfg
+typedef struct
 {
 	uint32_t tick_freq;
 	systick_clk_src_t clk_src;

@@ -3,7 +3,7 @@
 //
 
 #include <systick.h>
-#include <systick-internal.h>
+#include <systick_internal.h>
 #include <rcc.h>
 #include <mmio.h>
 
@@ -50,7 +50,6 @@ uint32_t SysTick_GetTick(void)
 	return counter;
 }
 
-// NVIC Implementation
 void SysTick_Handler(void)
 {
 	counter++;
