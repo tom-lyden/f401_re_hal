@@ -25,7 +25,4 @@ typedef struct systick_cfg
 bool_t SysTick_Init(const systick_cfg_t* cfg);
 uint32_t SysTick_GetTick(void);
 
-// Called by SysTick vector, do not call manually!
-void SysTick_Handler(void);
-
 #endif // F401_RE_HAL_SYSTICK_H
