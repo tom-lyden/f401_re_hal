@@ -6,6 +6,7 @@
 #define F401_RE_HAL_GPIO_H
 
 #include <stdint.h>
+#include <utils.h>
 
 typedef enum
 {
@@ -94,6 +95,15 @@ typedef enum
 	GPIO_STATE_HIGH = 1,
 } gpio_state_t;
 
+typedef enum
+{
+	GPIO_INTERRUPT_RISING_EDGE = 0,
+	GPIO_INTERRUPT_FALLING_EDGE = 1,
+	GPIO_INTERRUPT_ANY_EDGE = 2,
+} gpio_interrupt_type_t;
+
+typedef void gpio_interrupt_callback_t(void *);
+
 typedef struct
 {
 	gpio_mode_t mode;
@@ -103,9 +113,18 @@ typedef struct
 	gpio_af_t af;
 } gpio_config_t;
 
+typedef struct
+{
+	gpio_interrupt_type_t type;
+	gpio_interrupt_callback_t* callback;
+	void* callback_arg;
+} gpio_interrupt_cfg_t;
+
 // Configuration
 void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_config_t* cfg);
 void GPIO_Lock(gpio_port_t port, uint32_t pin_mask);
+
+bool_t GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, gpio_interrupt_cfg_t* cfg);
 
 // Usage
 void GPIO_Write(gpio_port_t port, gpio_pin_t pin, gpio_state_t state);

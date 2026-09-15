@@ -17,6 +17,8 @@
 #define RCC_CFG_HPRE_OFFSET (4)
 #define RCC_CFG_HPRE_WIDTH (4)
 
+#define RCC_APB2EN_SYSCFG_OFFSET (14)
+
 typedef enum
 {
 	SYSCLK_HSI = 0,

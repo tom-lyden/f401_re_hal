@@ -8,6 +8,7 @@ add_library(f401_re_hal STATIC
         src/rcc/rcc.c
         src/systick/systick.c
         src/exti/exti.c
+        src/syscfg/syscfg.c
 )
 
 target_include_directories(f401_re_hal 
@@ -20,4 +21,5 @@ target_include_directories(f401_re_hal
         include/rcc
         include/systick
         include/exti
+        include/syscfg
 )
