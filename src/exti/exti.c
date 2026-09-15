@@ -15,7 +15,7 @@ typedef struct
 
 static exti_callback_t callbacks[EXTI_LINE_MAX];
 
-static void handle_irq_num(exti_line_t exti_line);
+static void handle_irq_on_line(exti_line_t exti_line);
 
 void EXTI_ConfigureInterrupt(const exti_trigger_cfg_t* cfg)
 {
@@ -41,44 +41,44 @@ void EXTI_ConfigureInterrupt(const exti_trigger_cfg_t* cfg)
     MMIO_WriteField(&exti->IMR, cfg->line, 1, 1);
 }
 
-void EXTI0_IRQHandler(void)
+void EXTI0_Handler(void)
 {
-    handle_irq_num(EXTI_LINE_0);
+    handle_irq_on_line(EXTI_LINE_0);
 }
 
-void EXTI1_IRQHandler(void)
+void EXTI1_Handler(void)
 {
-    handle_irq_num(EXTI_LINE_1);
+    handle_irq_on_line(EXTI_LINE_1);
 }
 
-void EXTI2_IRQHandler(void)
+void EXTI2_Handler(void)
 {
-    handle_irq_num(EXTI_LINE_2);
+    handle_irq_on_line(EXTI_LINE_2);
 }
 
-void EXTI3_IRQHandler(void)
+void EXTI3_Handler(void)
 {
-    handle_irq_num(EXTI_LINE_3);
+    handle_irq_on_line(EXTI_LINE_3);
 }
 
-void EXTI4_IRQHandler(void)
+void EXTI4_Handler(void)
 {
-    handle_irq_num(EXTI_LINE_4);
+    handle_irq_on_line(EXTI_LINE_4);
 }
 
-void EXTI9_5_IRQHandler(void)
+void EXTI9_5_Handler(void)
 {
     for (exti_line_t line = EXTI_LINE_5; line <= EXTI_LINE_9; line++)
-        handle_irq_num(line);
+        handle_irq_on_line(line);
 }
 
-void EXTI15_10_IRQHandler(void)
+void EXTI15_10_Handler(void)
 {
     for (exti_line_t line = EXTI_LINE_10; line <= EXTI_LINE_15; line++)
-        handle_irq_num(line);
+        handle_irq_on_line(line);
 }
 
-static void handle_irq_num(exti_line_t exti_line)
+static void handle_irq_on_line(exti_line_t exti_line)
 {
     volatile exti_t* exti = EXTI_BASE;
     
