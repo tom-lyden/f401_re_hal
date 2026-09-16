@@ -8,7 +8,7 @@
 typedef enum
 {
 	FALSE = 0,
-	TRUE = 1
+	TRUE  = 1
 } bool_t;
 
 #endif // F401_RE_HAL_UTILS_H

@@ -38,5 +38,4 @@ typedef struct
 	uint32_t AFR[2];
 } gpio_t;
 
-
 #endif // F401_RE_HAL_GPIO_INTERNAL_H

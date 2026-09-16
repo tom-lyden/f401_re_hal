@@ -14,24 +14,24 @@ typedef enum
 	GPIO_PORT_B = 1,
 	GPIO_PORT_C = 2,
 	GPIO_PORT_D = 3,
-	
+
 	// Reserved
-	
+
 	GPIO_PORT_H = 7,
 } gpio_port_t;
 
 typedef enum
 {
-	GPIO_PIN_0 = 0,
-	GPIO_PIN_1 = 1,
-	GPIO_PIN_2 = 2,
-	GPIO_PIN_3 = 3,
-	GPIO_PIN_4 = 4,
-	GPIO_PIN_5 = 5,
-	GPIO_PIN_6 = 6,
-	GPIO_PIN_7 = 7,
-	GPIO_PIN_8 = 8,
-	GPIO_PIN_9 = 9,
+	GPIO_PIN_0  = 0,
+	GPIO_PIN_1  = 1,
+	GPIO_PIN_2  = 2,
+	GPIO_PIN_3  = 3,
+	GPIO_PIN_4  = 4,
+	GPIO_PIN_5  = 5,
+	GPIO_PIN_6  = 6,
+	GPIO_PIN_7  = 7,
+	GPIO_PIN_8  = 8,
+	GPIO_PIN_9  = 9,
 	GPIO_PIN_10 = 10,
 	GPIO_PIN_11 = 11,
 	GPIO_PIN_12 = 12,
@@ -42,45 +42,45 @@ typedef enum
 
 typedef enum
 {
-	GPIO_MODE_INPUT = 0,
-	GPIO_MODE_OUTPUT = 1,
+	GPIO_MODE_INPUT     = 0,
+	GPIO_MODE_OUTPUT    = 1,
 	GPIO_MODE_ALTERNATE = 2,
-	GPIO_MODE_ANALOG = 3,
+	GPIO_MODE_ANALOG    = 3,
 } gpio_mode_t;
 
 typedef enum
 {
-	GPIO_TYPE_PUSH_PULL = 0,
+	GPIO_TYPE_PUSH_PULL  = 0,
 	GPIO_TYPE_OPEN_DRAIN = 1,
 } gpio_type_t;
 
 typedef enum
 {
-	GPIO_SPEED_LOW = 0,
-	GPIO_SPEED_MEDIUM = 1,
-	GPIO_SPEED_HIGH = 2,
+	GPIO_SPEED_LOW       = 0,
+	GPIO_SPEED_MEDIUM    = 1,
+	GPIO_SPEED_HIGH      = 2,
 	GPIO_SPEED_VERY_HIGH = 3,
 } gpio_speed_t;
 
 typedef enum
 {
-	GPIO_PUPD_NONE = 0,
-	GPIO_PUPD_PULLUP = 1,
+	GPIO_PUPD_NONE     = 0,
+	GPIO_PUPD_PULLUP   = 1,
 	GPIO_PUPD_PULLDOWN = 2,
 } gpio_pupd_t;
 
 typedef enum
 {
-	GPIO_AF_0 = 0,
-	GPIO_AF_1 = 1,
-	GPIO_AF_2 = 2,
-	GPIO_AF_3 = 3,
-	GPIO_AF_4 = 4,
-	GPIO_AF_5 = 5,
-	GPIO_AF_6 = 6,
-	GPIO_AF_7 = 7,
-	GPIO_AF_8 = 8,
-	GPIO_AF_9 = 9,
+	GPIO_AF_0  = 0,
+	GPIO_AF_1  = 1,
+	GPIO_AF_2  = 2,
+	GPIO_AF_3  = 3,
+	GPIO_AF_4  = 4,
+	GPIO_AF_5  = 5,
+	GPIO_AF_6  = 6,
+	GPIO_AF_7  = 7,
+	GPIO_AF_8  = 8,
+	GPIO_AF_9  = 9,
 	GPIO_AF_10 = 10,
 	GPIO_AF_11 = 11,
 	GPIO_AF_12 = 12,
@@ -91,18 +91,18 @@ typedef enum
 
 typedef enum
 {
-	GPIO_STATE_LOW = 0,
+	GPIO_STATE_LOW  = 0,
 	GPIO_STATE_HIGH = 1,
 } gpio_state_t;
 
 typedef enum
 {
-	GPIO_INTERRUPT_RISING_EDGE = 0,
+	GPIO_INTERRUPT_RISING_EDGE  = 0,
 	GPIO_INTERRUPT_FALLING_EDGE = 1,
-	GPIO_INTERRUPT_ANY_EDGE = 2,
+	GPIO_INTERRUPT_ANY_EDGE     = 2,
 } gpio_interrupt_type_t;
 
-typedef void gpio_interrupt_callback_t(void *);
+typedef void gpio_interrupt_callback_t(void*);
 
 typedef struct
 {

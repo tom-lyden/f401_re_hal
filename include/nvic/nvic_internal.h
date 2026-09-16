@@ -22,7 +22,7 @@
 
 typedef struct
 {
-    uint32_t REGS[NUM_REGS];
+	uint32_t REGS[NUM_REGS];
 } nvic_regs_t;
 
 #endif //F401_RE_HAL_NVIC_INTERNAL_H

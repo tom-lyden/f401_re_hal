@@ -10,10 +10,10 @@
 
 void NVIC_EnableInterrupt(irq_t irq_n)
 {
-    volatile nvic_regs_t* iser = NVIC_ISER_REGS;
-    
-    uint8_t reg = NVIC_REG(irq_n);
-    uint8_t field = NVIC_FIELD(irq_n);
-    
-    iser->REGS[reg] = 1U << field;
+	volatile nvic_regs_t* iser = NVIC_ISER_REGS;
+
+	uint8_t reg = NVIC_REG(irq_n);
+	uint8_t field = NVIC_FIELD(irq_n);
+
+	iser->REGS[reg] = 1U << field;
 }

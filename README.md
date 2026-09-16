@@ -2,7 +2,8 @@
 
 A small bare-metal hardware abstraction layer for the STM32F401RE, written in C.
 
-The goal of this project is to build a minimal HAL directly from the STM32 reference manual and datasheet, while keeping hardware-specific details out of application code.
+The goal of this project is to build a minimal HAL directly from the STM32 reference manual and datasheet, while keeping
+hardware-specific details out of application code.
 
 ## Current Features
 
@@ -76,13 +77,16 @@ Current hardware validation includes:
 
 The project separates MCU-specific hardware access from application-level behavior.
 
-The HAL exposes hardware capabilities such as GPIO, interrupts, clock control and system timing. Higher-level drivers and board-specific components are intended to build on top of these primitives rather than becoming part of the HAL itself.
+The HAL exposes hardware capabilities such as GPIO, interrupts, clock control and system timing. Higher-level drivers
+and board-specific components are intended to build on top of these primitives rather than becoming part of the HAL
+itself.
 
 Peripheral and Cortex-M4 register blocks are accessed directly through their documented memory-mapped interfaces.
 
 ## Status
 
-GPIO, RCC, SysTick, EXTI, SYSCFG and basic NVIC interrupt enable support are currently implemented and tested on hardware.
+GPIO, RCC, SysTick, EXTI, SYSCFG and basic NVIC interrupt enable support are currently implemented and tested on
+hardware.
 
 Additional peripheral abstractions will be added as required by future projects rather than implemented speculatively.
 

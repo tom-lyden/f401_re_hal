@@ -29,14 +29,14 @@ typedef enum
 typedef enum
 {
 	AHB_DIV_1 = 0,
-	
+
 	// No division for any number 1-7
-	
-	AHB_DIV_2 = 8,
-	AHB_DIV_4 = 9,
-	AHB_DIV_8 = 10,
-	AHB_DIV_16 = 11,
-	AHB_DIV_64 = 12,
+
+	AHB_DIV_2   = 8,
+	AHB_DIV_4   = 9,
+	AHB_DIV_8   = 10,
+	AHB_DIV_16  = 11,
+	AHB_DIV_64  = 12,
 	AHB_DIV_128 = 13,
 	AHB_DIV_256 = 14,
 	AHB_DIV_512 = 15,

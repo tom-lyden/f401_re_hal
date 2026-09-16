@@ -11,26 +11,26 @@ static uint32_t scale_sysclk(uint32_t sysclk, ahb_scaling_t ahb_scaling);
 void RCC_EnableGPIO(rcc_en_gpio_port_t port)
 {
 	volatile rcc_t* rcc = RCC_BASE;
-	
+
 	rcc->AHB1ENR |= 1U << port;
 }
 
 void RCC_EnableSYSCFG(void)
 {
 	volatile rcc_t* rcc = RCC_BASE;
-	
+
 	rcc->APB2ENR |= 1U << RCC_APB2EN_SYSCFG_OFFSET;
 }
 
 uint32_t RCC_GetHCLK(void)
 {
 	volatile rcc_t* rcc = RCC_BASE;
-	
+
 	uint32_t cfgr = rcc->CFGR;
-	
+
 	sysclk_t sysclk = MMIO_ReadField(&cfgr, RCC_CFG_SWS_OFFSET, RCC_CFG_SWS_WIDTH);
 	ahb_scaling_t ahb_scaling = MMIO_ReadField(&cfgr, RCC_CFG_HPRE_OFFSET, RCC_CFG_HPRE_WIDTH);
-	
+
 	switch (sysclk)
 	{
 		case SYSCLK_HSI:
@@ -38,7 +38,7 @@ uint32_t RCC_GetHCLK(void)
 		case SYSCLK_HSE:
 		case SYSCLK_PLL:
 		default:
-			while (1) {} // Not implemented yet; spin forever
+			while (1) { } // Not implemented yet; spin forever
 	}
 }
 

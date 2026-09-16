@@ -11,7 +11,7 @@
 typedef enum
 {
 	SYSTICK_CLK_SRC_AHB_DIV_8 = 0,
-	SYSTICK_CLK_SRC_AHB = 1,
+	SYSTICK_CLK_SRC_AHB       = 1,
 } systick_clk_src_t;
 
 typedef struct
