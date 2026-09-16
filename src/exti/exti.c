@@ -5,6 +5,7 @@
 #include <exti.h>
 #include <exti_internal.h>
 #include <mmio.h>
+#include <nvic.h>
 #include <stddef.h>
 
 typedef struct
@@ -16,6 +17,7 @@ typedef struct
 static exti_callback_t callbacks[EXTI_LINE_MAX];
 
 static void handle_irq_on_line(exti_line_t exti_line);
+static irq_t get_nvic_irq_number(exti_line_t line);
 
 void EXTI_ConfigureInterrupt(const exti_trigger_cfg_t* cfg)
 {
@@ -38,6 +40,8 @@ void EXTI_ConfigureInterrupt(const exti_trigger_cfg_t* cfg)
     
     exti->PR = 1U << cfg->line;
 
+    NVIC_EnableInterrupt(get_nvic_irq_number(cfg->line));
+    
     MMIO_WriteField(&exti->IMR, cfg->line, 1, 1);
 }
 
@@ -89,4 +93,36 @@ static void handle_irq_on_line(exti_line_t exti_line)
     
     if (callbacks[exti_line].callback != NULL)
         callbacks[exti_line].callback(callbacks[exti_line].callback_arg);
+}
+
+static irq_t get_nvic_irq_number(exti_line_t line)
+{
+    switch (line)
+    {
+        case EXTI_LINE_0:
+            return IRQ_EXTI_LINE_0;
+        case EXTI_LINE_1:
+            return IRQ_EXTI_LINE_1;
+        case EXTI_LINE_2:
+            return IRQ_EXTI_LINE_2;
+        case EXTI_LINE_3:
+            return IRQ_EXTI_LINE_3;
+        case EXTI_LINE_4:
+            return IRQ_EXTI_LINE_4;
+        case EXTI_LINE_5:
+        case EXTI_LINE_6:
+        case EXTI_LINE_7:
+        case EXTI_LINE_8:
+        case EXTI_LINE_9:
+            return IRQ_EXTI_LINE_9_5;
+        case EXTI_LINE_10:
+        case EXTI_LINE_11:
+        case EXTI_LINE_12:
+        case EXTI_LINE_13:
+        case EXTI_LINE_14:
+        case EXTI_LINE_15:
+            return IRQ_EXTI_LINE_15_10;
+        default:
+            __builtin_unreachable();
+    }
 }
