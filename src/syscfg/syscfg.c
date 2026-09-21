@@ -2,6 +2,8 @@
 // Created by tomly on 15/09/2026.
 //
 
+#include <stdbool.h>
+#include <stdint.h>
 #include <mmio.h>
 #include <rcc.h>
 #include <syscfg.h>
@@ -13,12 +15,12 @@
 #define LINE_REGISTER(line) ((line) / (NUM_EXTI_LINES_PER_REGISTER))
 #define LINE_INDEX(line) ((line) % (NUM_EXTI_LINES_PER_REGISTER))
 
-static bool_t is_exti_line_occupied[NUM_EXTI_GPIO_LINES] = { FALSE };
+static bool is_exti_line_occupied[NUM_EXTI_GPIO_LINES] = { false };
 
-bool_t SYSCFG_BindEXTILine(exti_line_t line, gpio_port_t port)
+bool SYSCFG_BindEXTILine(exti_line_t line, gpio_port_t port)
 {
 	if (is_exti_line_occupied[line])
-		return FALSE;
+		return false;
 
 	RCC_EnableSYSCFG();
 
@@ -29,7 +31,7 @@ bool_t SYSCFG_BindEXTILine(exti_line_t line, gpio_port_t port)
 
 	MMIO_WriteField(&syscfg->EXTICR[line_reg], line_offset, EXTI_LINE_FIELD_WIDTH, port);
 
-	is_exti_line_occupied[line] = TRUE;
+	is_exti_line_occupied[line] = true;
 
-	return TRUE;
+	return true;
 }

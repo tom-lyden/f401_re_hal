@@ -2,6 +2,8 @@
 // Created by tomly on 02/09/2026.
 //
 
+#include <stdint.h>
+#include <stdbool.h>
 #include <gpio.h>
 #include <gpio_internal.h>
 #include <mmio.h>
@@ -41,12 +43,12 @@ void GPIO_Lock(gpio_port_t port, uint32_t pin_mask)
 	(void)gpio->LCKR; // read to complete lock sequence, value unused
 }
 
-bool_t GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interrupt_cfg_t* cfg)
+bool GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interrupt_cfg_t* cfg)
 {
 	exti_line_t line = get_exti_line(pin);
 
 	if (!SYSCFG_BindEXTILine(line, port))
-		return FALSE;
+		return false;
 
 	exti_trigger_cfg_t exti_cfg =
 	{
@@ -58,7 +60,7 @@ bool_t GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interru
 
 	EXTI_ConfigureInterrupt(&exti_cfg);
 
-	return TRUE;
+	return true;
 }
 
 void GPIO_Write(gpio_port_t port, gpio_pin_t pin, gpio_state_t state)

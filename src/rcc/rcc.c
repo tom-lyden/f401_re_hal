@@ -5,6 +5,7 @@
 #include <rcc_internal.h>
 #include <rcc.h>
 #include <mmio.h>
+#include <stdint.h>
 
 static uint32_t scale_sysclk(uint32_t sysclk, ahb_scaling_t ahb_scaling);
 

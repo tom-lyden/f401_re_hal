@@ -2,6 +2,8 @@
 // Created by tomly on 06/09/2026.
 //
 
+#include <stdint.h>
+#include <stdbool.h>
 #include <systick.h>
 #include <systick_internal.h>
 #include <rcc.h>
@@ -11,7 +13,7 @@
 
 static volatile uint32_t counter = 0U;
 
-bool_t SysTick_Init(const systick_cfg_t* cfg)
+bool SysTick_Init(const systick_cfg_t* cfg)
 {
 	uint32_t hclk = RCC_GetHCLK();
 
@@ -29,7 +31,7 @@ bool_t SysTick_Init(const systick_cfg_t* cfg)
 	uint32_t period_cycles = hclk / cfg->tick_freq;
 
 	if (period_cycles < 2 || period_cycles > SYSTICK_PERIOD_MAX_CYCLES)
-		return FALSE;
+		return false;
 
 	volatile systick_t* systick = SYSTICK_BASE;
 
@@ -42,7 +44,7 @@ bool_t SysTick_Init(const systick_cfg_t* cfg)
 	MMIO_WriteField(&systick->CTRL, SYSTICK_CTRL_CLKSOURCE_OFFSET, 1, cfg->clk_src);
 	MMIO_WriteField(&systick->CTRL, SYSTICK_CTRL_ENABLE_OFFSET, 1, cfg->enable_counter);
 
-	return TRUE;
+	return true;
 }
 
 uint32_t SysTick_GetTick(void)

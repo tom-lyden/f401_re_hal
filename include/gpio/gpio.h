@@ -5,8 +5,8 @@
 #ifndef F401_RE_HAL_GPIO_H
 #define F401_RE_HAL_GPIO_H
 
+#include <stdbool.h>
 #include <stdint.h>
-#include <utils.h>
 
 typedef enum
 {
@@ -124,7 +124,7 @@ typedef struct
 void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_config_t* cfg);
 void GPIO_Lock(gpio_port_t port, uint32_t pin_mask);
 
-bool_t GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interrupt_cfg_t* cfg);
+bool GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interrupt_cfg_t* cfg);
 
 // Usage
 void GPIO_Write(gpio_port_t port, gpio_pin_t pin, gpio_state_t state);

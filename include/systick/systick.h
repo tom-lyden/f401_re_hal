@@ -5,7 +5,7 @@
 #ifndef F401_RE_HAL_SYSTICK_H
 #define F401_RE_HAL_SYSTICK_H
 
-#include <utils.h>
+#include <stdbool.h>
 #include <stdint.h>
 
 typedef enum
@@ -18,11 +18,11 @@ typedef struct
 {
 	uint32_t tick_freq;
 	systick_clk_src_t clk_src;
-	bool_t enable_irq;
-	bool_t enable_counter;
+	bool enable_irq;
+	bool enable_counter;
 } systick_cfg_t;
 
-bool_t SysTick_Init(const systick_cfg_t* cfg);
+bool SysTick_Init(const systick_cfg_t* cfg);
 uint32_t SysTick_GetTick(void);
 
 #endif // F401_RE_HAL_SYSTICK_H

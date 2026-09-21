@@ -4,6 +4,8 @@
 
 #include <nvic.h>
 #include <nvic_internal.h>
+#include <stm32f401re_interrupts.h>
+#include <stdint.h>
 
 #define NVIC_REG(irq_n) ((irq_n) / (NUM_INTERRUPTS_PER_REG))
 #define NVIC_FIELD(irq_n) ((irq_n) % (NUM_INTERRUPTS_PER_REG))
