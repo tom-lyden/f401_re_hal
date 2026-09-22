@@ -16,7 +16,7 @@ typedef enum
 
 typedef struct
 {
-	uint32_t tick_freq;
+	uint32_t tick_frequency_hz;
 	systick_clk_src_t clk_src;
 	bool enable_irq;
 	bool enable_counter;
