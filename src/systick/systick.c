@@ -28,7 +28,7 @@ bool SysTick_Init(const systick_cfg_t* cfg)
 			__builtin_unreachable();
 	}
 
-	uint32_t period_cycles = hclk / cfg->tick_freq;
+	uint32_t period_cycles = hclk / cfg->tick_frequency_hz;
 
 	if (period_cycles < 2 || period_cycles > SYSTICK_PERIOD_MAX_CYCLES)
 		return false;

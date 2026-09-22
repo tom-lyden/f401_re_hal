@@ -13,7 +13,6 @@ typedef enum
 	RCC_EN_GPIO_PORT_B = 1,
 	RCC_EN_GPIO_PORT_C = 2,
 	RCC_EN_GPIO_PORT_D = 3,
-	RCC_EN_GPIO_PORT_E = 4,
 
 	// Reserved
 
