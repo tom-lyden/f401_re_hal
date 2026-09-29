@@ -7,13 +7,21 @@
 #include <mmio.h>
 #include <stdint.h>
 
-static uint32_t scale_sysclk(uint32_t sysclk, ahb_scaling_t ahb_scaling);
+static uint32_t scale_clk_ahb(uint32_t sysclk, ahb_scaling_t ahb_scaling);
+static uint32_t scale_clk_apb(uint32_t sysclk, apb_scaling_t apb_scaling);
 
 void RCC_EnableGPIO(rcc_en_gpio_port_t port)
 {
 	volatile rcc_t* rcc = RCC_BASE;
 
 	rcc->AHB1ENR |= 1U << port;
+}
+
+void RCC_EnableI2C(rcc_en_i2c_port_t port)
+{
+	volatile rcc_t* rcc = RCC_BASE;
+	
+	rcc->APB1ENR |= 1U << port;
 }
 
 void RCC_EnableSYSCFG(void)
@@ -35,7 +43,7 @@ uint32_t RCC_GetHCLK(void)
 	switch (sysclk)
 	{
 		case SYSCLK_HSI:
-			return scale_sysclk(HSI_FREQ_HZ, ahb_scaling);
+			return scale_clk_ahb(HSI_FREQ_HZ, ahb_scaling);
 		case SYSCLK_HSE:
 		case SYSCLK_PLL:
 		default:
@@ -43,7 +51,21 @@ uint32_t RCC_GetHCLK(void)
 	}
 }
 
-static uint32_t scale_sysclk(uint32_t sysclk, ahb_scaling_t ahb_scaling)
+uint32_t RCC_GetPCLK1(void)
+{
+	uint32_t sysclk = RCC_GetHCLK();
+
+	volatile rcc_t* rcc = RCC_BASE;
+	uint32_t cfgr = rcc->CFGR;
+	
+	apb_scaling_t apb_scaling = MMIO_ReadField(&cfgr, RCC_CFG_PPRE1_OFFSET, RCC_CFG_PPRE1_WIDTH);
+	
+	uint32_t pclk1 = scale_clk_apb(sysclk, apb_scaling);
+	
+	return pclk1;
+}
+
+static uint32_t scale_clk_ahb(uint32_t sysclk, ahb_scaling_t ahb_scaling)
 {
 	switch (ahb_scaling)
 	{
@@ -63,6 +85,23 @@ static uint32_t scale_sysclk(uint32_t sysclk, ahb_scaling_t ahb_scaling)
 			return sysclk >> 8;
 		case AHB_DIV_512:
 			return sysclk >> 9;
+		default:
+			return sysclk;
+	}
+}
+
+static uint32_t scale_clk_apb(uint32_t sysclk, apb_scaling_t apb_scaling)
+{
+	switch (apb_scaling)
+	{
+		case APB_DIV_2:
+			return sysclk >> 1;
+		case APB_DIV_4:
+			return sysclk >> 2;
+		case APB_DIV_8:
+			return sysclk >> 3;
+		case APB_DIV_16:
+			return sysclk >> 4;
 		default:
 			return sysclk;
 	}

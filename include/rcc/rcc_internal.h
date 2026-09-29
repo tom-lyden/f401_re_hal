@@ -16,6 +16,8 @@
 #define RCC_CFG_SWS_WIDTH (2)
 #define RCC_CFG_HPRE_OFFSET (4)
 #define RCC_CFG_HPRE_WIDTH (4)
+#define RCC_CFG_PPRE1_OFFSET (10)
+#define RCC_CFG_PPRE1_WIDTH (3)
 
 #define RCC_APB2EN_SYSCFG_OFFSET (14)
 
@@ -41,6 +43,18 @@ typedef enum
 	AHB_DIV_256 = 14,
 	AHB_DIV_512 = 15,
 } ahb_scaling_t;
+
+typedef enum
+{
+	APB_DIV_1 = 0,
+	
+	// No division for any number 1-3
+	
+	APB_DIV_2   = 4,
+	APB_DIV_4   = 5,
+	APB_DIV_8   = 6,
+	APB_DIV_16  = 7,
+} apb_scaling_t;
 
 typedef struct
 {
