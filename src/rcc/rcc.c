@@ -14,21 +14,21 @@ void RCC_EnableGPIO(rcc_en_gpio_port_t port)
 {
 	volatile rcc_t* rcc = RCC_BASE;
 
-	rcc->AHB1ENR |= 1U << port;
+	MMIO_WriteBitsRMW(&rcc->AHB1ENR, port, 1, 1);
 }
 
 void RCC_EnableI2C(rcc_en_i2c_port_t port)
 {
 	volatile rcc_t* rcc = RCC_BASE;
 	
-	rcc->APB1ENR |= 1U << port;
+	MMIO_WriteBitsRMW(&rcc->APB1ENR, port, 1, 1);
 }
 
 void RCC_EnableSYSCFG(void)
 {
 	volatile rcc_t* rcc = RCC_BASE;
 
-	rcc->APB2ENR |= 1U << RCC_APB2EN_SYSCFG_OFFSET;
+	MMIO_WriteBitsRMW(&rcc->APB1ENR, RCC_APB2EN_SYSCFG_OFFSET, 1, 1);
 }
 
 uint32_t RCC_GetHCLK(void)
@@ -37,8 +37,8 @@ uint32_t RCC_GetHCLK(void)
 
 	uint32_t cfgr = rcc->CFGR;
 
-	sysclk_t sysclk = MMIO_ReadField(&cfgr, RCC_CFG_SWS_OFFSET, RCC_CFG_SWS_WIDTH);
-	ahb_scaling_t ahb_scaling = MMIO_ReadField(&cfgr, RCC_CFG_HPRE_OFFSET, RCC_CFG_HPRE_WIDTH);
+	sysclk_t sysclk = MMIO_ReadBits(&cfgr, RCC_CFG_SWS_OFFSET, RCC_CFG_SWS_WIDTH);
+	ahb_scaling_t ahb_scaling = MMIO_ReadBits(&cfgr, RCC_CFG_HPRE_OFFSET, RCC_CFG_HPRE_WIDTH);
 
 	switch (sysclk)
 	{
@@ -58,7 +58,7 @@ uint32_t RCC_GetPCLK1(void)
 	volatile rcc_t* rcc = RCC_BASE;
 	uint32_t cfgr = rcc->CFGR;
 	
-	apb_scaling_t apb_scaling = MMIO_ReadField(&cfgr, RCC_CFG_PPRE1_OFFSET, RCC_CFG_PPRE1_WIDTH);
+	apb_scaling_t apb_scaling = MMIO_ReadBits(&cfgr, RCC_CFG_PPRE1_OFFSET, RCC_CFG_PPRE1_WIDTH);
 	
 	uint32_t pclk1 = scale_clk_apb(sysclk, apb_scaling);
 	

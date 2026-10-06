@@ -12,7 +12,10 @@
 #include <syscfg.h>
 
 #define GPIO_AFR_REG(pin) ((pin) / (GPIO_AFR_FIELDS_PER_REG))
-#define GPIO_AFR_FIELD(pin) ((pin) % (GPIO_AFR_FIELDS_PER_REG))
+#define GPIO_AFR_OFFSET(pin) (((pin) % (GPIO_AFR_FIELDS_PER_REG)) * (GPIO_AFR_WIDTH))
+#define GPIO_MODER_OFFSET(pin) ((pin) * (GPIO_MODE_WIDTH))
+#define GPIO_SPEEDR_OFFSET(pin) ((pin) * (GPIO_OSPEED_WIDTH))
+#define GPIO_PUPDR_OFFSET(pin) ((pin) * (GPIO_PUPD_WIDTH))
 
 static rcc_en_gpio_port_t get_rcc_port(gpio_port_t port);
 static exti_line_t get_exti_line(gpio_pin_t pin);
@@ -25,11 +28,11 @@ void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_config_t* cfg)
 
 	volatile gpio_t* gpio = GPIO_PORT_ADDR(port);
 
-	MMIO_WriteField(&gpio->MODER, pin, GPIO_MODE_WIDTH, cfg->mode);
-	MMIO_WriteField(&gpio->TYPER, pin, GPIO_TYPE_WIDTH, cfg->type);
-	MMIO_WriteField(&gpio->OSPEEDR, pin, GPIO_OSPEED_WIDTH, cfg->ospeed);
-	MMIO_WriteField(&gpio->PUPDR, pin, GPIO_PUPD_WIDTH, cfg->pupd);
-	MMIO_WriteField(&gpio->AFR[GPIO_AFR_REG(pin)], GPIO_AFR_FIELD(pin), GPIO_AFR_WIDTH, cfg->af);
+	MMIO_WriteBitsRMW(&gpio->MODER, GPIO_MODER_OFFSET(pin), GPIO_MODE_WIDTH, cfg->mode);
+	MMIO_WriteBitsRMW(&gpio->TYPER, pin, GPIO_TYPE_WIDTH, cfg->type);
+	MMIO_WriteBitsRMW(&gpio->OSPEEDR, GPIO_SPEEDR_OFFSET(pin), GPIO_OSPEED_WIDTH, cfg->ospeed);
+	MMIO_WriteBitsRMW(&gpio->PUPDR, GPIO_PUPDR_OFFSET(pin), GPIO_PUPD_WIDTH, cfg->pupd);
+	MMIO_WriteBitsRMW(&gpio->AFR[GPIO_AFR_REG(pin)], GPIO_AFR_OFFSET(pin), GPIO_AFR_WIDTH, cfg->af);
 }
 
 void GPIO_Lock(gpio_port_t port, uint32_t pin_mask)
@@ -67,14 +70,16 @@ void GPIO_Write(gpio_port_t port, gpio_pin_t pin, gpio_state_t state)
 {
 	volatile gpio_t* gpio = GPIO_PORT_ADDR(port);
 
-	gpio->BSRR = (1U << pin) << (state ? 0 : GPIO_BSRR_BR0_OFFSET);
+	uint8_t offset = state ? pin : pin + GPIO_BSRR_BR0_OFFSET;
+	MMIO_WriteBitsDirect(&gpio->BSRR, offset, 1, 1);
 }
 
 void GPIO_Toggle(gpio_port_t port, gpio_pin_t pin)
 {
 	volatile gpio_t* gpio = GPIO_PORT_ADDR(port);
 
-	gpio_state_t state = (gpio_state_t)!!(gpio->ODR & (1U << pin));
+	uint32_t odr_val = MMIO_ReadBits(&gpio->ODR, pin, 1);
+	gpio_state_t state = (gpio_state_t)!!(odr_val);
 
 	GPIO_Write(port, pin, !state);
 }
@@ -83,7 +88,8 @@ gpio_state_t GPIO_Read(gpio_port_t port, gpio_pin_t pin)
 {
 	volatile gpio_t* gpio = GPIO_PORT_ADDR(port);
 
-	gpio_state_t state = (gpio_state_t)!!(gpio->IDR & (1U << pin));
+	uint32_t idr_val = MMIO_ReadBits(&gpio->IDR, pin, 1);
+	gpio_state_t state = (gpio_state_t)!!(idr_val);
 
 	return state;
 }

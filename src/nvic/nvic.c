@@ -3,6 +3,7 @@
 //
 
 #include <nvic.h>
+#include <mmio.h>
 #include <nvic_internal.h>
 #include <stm32f401re_interrupts.h>
 #include <stdint.h>
@@ -17,5 +18,5 @@ void NVIC_EnableInterrupt(irq_t irq_n)
 	uint8_t reg = NVIC_REG(irq_n);
 	uint8_t field = NVIC_FIELD(irq_n);
 
-	iser->REGS[reg] = 1U << field;
+	MMIO_WriteBitsDirect(&iser->REGS[reg], field, 1, 1);
 }

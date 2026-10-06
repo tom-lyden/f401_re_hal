@@ -105,7 +105,7 @@ void I2C_Init(const i2c_cfg_t* cfg)
 	bus_ctrl[bus].is_initialized = true;
 	
 	volatile i2c_t* i2c = I2C_PORT_ADDR(bus);
-	MMIO_WriteField(&i2c->CR1, I2C_CR1_EN_FIELD, I2C_CR1_EN_WIDTH, 1);
+	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_EN_FIELD, 1, 1);
 	
 	NVIC_EnableInterrupt(irqs_by_bus[bus][0]);
 	NVIC_EnableInterrupt(irqs_by_bus[bus][1]);
@@ -173,18 +173,21 @@ static void configure_peripheral(i2c_bus_t bus, const i2c_cfg_t* cfg, uint32_t p
 {
 	volatile i2c_t* i2c = I2C_PORT_ADDR(bus);
 	
-	MMIO_WriteField(&i2c->CR1, I2C_CR1_EN_FIELD, I2C_CR1_EN_WIDTH, 0);
+	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_EN_FIELD, 1, 0);
 	
-	MMIO_WriteField(&i2c->CR2, I2C_CR2_FREQ_FIELD, I2C_CR2_FREQ_WIDTH, freq);
-	MMIO_WriteField(&i2c->CR2, I2C_CR2_ITERREN_FIELD, I2C_CR2_ITERREN_WIDTH, 1);
-	MMIO_WriteField(&i2c->CR2, I2C_CR2_ITEVTEN_FIELD, I2C_CR2_ITEVTEN_WIDTH, 1);
-	MMIO_WriteField(&i2c->CR2, I2C_CR2_ITBUFEN_FIELD, I2C_CR2_ITBUFEN_WIDTH, 1);
+	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_FREQ_FIELD, I2C_CR2_FREQ_WIDTH, freq);
+	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_ITERREN_FIELD, 1, 1);
+	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_ITEVTEN_FIELD, 1, 1);
+	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_ITBUFEN_FIELD, 1, 1);
 	
-	i2c->CCR = calculate_ccr(cfg->clk_mode, cfg->clk_freq_hz, pclk1);
-	i2c->CCR |= (cfg->clk_mode != I2C_CLK_MODE_STANDARD) << I2C_CCR_MODE_FIELD;
-	i2c->CCR |=	(cfg->clk_mode == I2C_CLK_MODE_FAST_DC_16_9) << I2C_CCR_DUTY_FIELD;
+	uint32_t ccr =  calculate_ccr(cfg->clk_mode, cfg->clk_freq_hz, pclk1) |
+		(cfg->clk_mode != I2C_CLK_MODE_STANDARD) << I2C_CCR_MODE_FIELD |
+			(cfg->clk_mode == I2C_CLK_MODE_FAST_DC_16_9) << I2C_CCR_DUTY_FIELD;
 	
-	i2c->TRISE = calculate_trise(cfg->clk_mode, pclk1);
+	MMIO_WriteBitsDirect(&i2c->CCR, 0, I2C_CCR_WIDTH, ccr);
+	
+	uint8_t trise = calculate_trise(cfg->clk_mode, pclk1); 
+	MMIO_WriteBitsDirect(&i2c->TRISE, 0, I2C_TRISE_WIDTH, trise);
 }
 
 static uint8_t calculate_freq(uint32_t pclk1)
@@ -273,9 +276,11 @@ static void update_i2c_bus(i2c_bus_t bus)
 	i2c_queue_t* queue = &bus_ctrl[bus].queue;
 	i2c_req_t* req;
 	
-	if (fsm_state == I2C_FSM_STATE_DONE || fsm_state == I2C_FSM_STATE_ERROR)
+	if (fsm_state == I2C_FSM_STATE_DONE)
 	{
-		bus_ctrl[bus].req->state = fsm_state == I2C_FSM_STATE_ERROR ? I2C_BUS_REQ_ERROR : I2C_BUS_REQ_DONE;
+		if (bus_ctrl[bus].req->state != I2C_BUS_REQ_ERROR)
+			bus_ctrl[bus].req->state = I2C_BUS_REQ_DONE;
+		
 		I2C_Queue_Dequeue(queue, &req);
 		bus_ctrl[bus].req = NULL;
 		I2C_FSM_SetState(&bus_ctrl[bus].fsm, I2C_FSM_STATE_IDLE);
@@ -284,7 +289,7 @@ static void update_i2c_bus(i2c_bus_t bus)
 	if (!I2C_Queue_Peek(queue, &req))
 		return;
 	
-	if (req->state == I2C_BUS_REQ_IN_PROGRESS)
+	if (req->state != I2C_BUS_REQ_QUEUED && req->state != I2C_BUS_REQ_DONE)
 	{
 		I2C_FSM_Update(&bus_ctrl[bus].fsm);
 		return;
@@ -307,10 +312,16 @@ static void update_i2c_bus(i2c_bus_t bus)
 
 static void handle_event(i2c_bus_t bus)
 {
+	if (!bus_ctrl[bus].is_initialized)
+		return;
+	
 	I2C_FSM_Handle_Event(&bus_ctrl[bus].fsm);
 }
 
 static void handle_error(i2c_bus_t bus)
 {
+	if (!bus_ctrl[bus].is_initialized)
+		return;
+	
 	I2C_FSM_Handle_Error(&bus_ctrl[bus].fsm);
 }

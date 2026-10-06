@@ -107,7 +107,7 @@ static void i2c_fsm_start_enter(i2c_callback_ctx_t* ctx)
 {
 	volatile i2c_t* i2c = I2C_PORT_ADDR(ctx->bus);
 	
-	MMIO_WriteField(&i2c->CR1, I2C_CR1_START_FIELD, I2C_CR1_START_WIDTH, 1);
+	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_START_FIELD, 1, 1);
 }
 
 static void i2c_fsm_start_handle_evt(i2c_callback_ctx_t* ctx)
@@ -201,7 +201,7 @@ static void i2c_fsm_data_update(i2c_callback_ctx_t* ctx)
 static void i2c_fsm_stop_enter(i2c_callback_ctx_t* ctx)
 {
 	volatile i2c_t* i2c = I2C_PORT_ADDR(ctx->bus);
-	MMIO_WriteField(&i2c->CR1, I2C_CR1_STOP_FIELD, I2C_CR1_STOP_WIDTH, 1);
+	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_STOP_FIELD, 1, 1);
 }
 
 static void i2c_fsm_stop_handle_evt(i2c_callback_ctx_t* ctx)
@@ -212,7 +212,7 @@ static void i2c_fsm_stop_handle_evt(i2c_callback_ctx_t* ctx)
 static void i2c_fsm_stop_update(i2c_callback_ctx_t* ctx)
 {
 	volatile i2c_t* i2c = I2C_PORT_ADDR(ctx->bus);
-	if (MMIO_ReadField(&i2c->CR1, I2C_CR1_STOP_FIELD, I2C_CR1_STOP_WIDTH))
+	if (MMIO_ReadBits(&i2c->CR1, I2C_CR1_STOP_FIELD, 1))
 		return;
 	
 	I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_DONE);
@@ -235,27 +235,27 @@ static void i2c_fsm_done_update(i2c_callback_ctx_t* ctx)
 
 static void i2c_fsm_err_enter(i2c_callback_ctx_t* ctx)
 {
+	ctx->req->state = I2C_BUS_REQ_ERROR;
+	
 	volatile i2c_t* i2c = I2C_PORT_ADDR(ctx->bus);
 	uint32_t sr1 = i2c->SR1;
 	
 	if (READ_BIT(sr1, I2C_SR1_BERR_FIELD))
 	{
-		MMIO_WriteField(&i2c->SR1, I2C_SR1_BERR_FIELD, I2C_SR1_BERR_WIDTH, 0);
+		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_BERR_FIELD, 1, 0);
 	}
 	if (READ_BIT(sr1, I2C_SR1_ARLO_FIELD))
 	{
-		MMIO_WriteField(&i2c->SR1, I2C_SR1_ARLO_FIELD, I2C_SR1_ARLO_WIDTH, 0);
+		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_ARLO_FIELD, 1, 0);
 	}
 	if (READ_BIT(sr1, I2C_SR1_AF_FIELD))
 	{
-		MMIO_WriteField(&i2c->SR1, I2C_SR1_AF_FIELD, I2C_SR1_AF_WIDTH, 0);
-		MMIO_WriteField(&i2c->CR1, I2C_CR1_STOP_FIELD, I2C_CR1_STOP_WIDTH, 1);
+		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_AF_FIELD, 1, 0);
+		I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_STOP);
 	}
 	if (READ_BIT(sr1, I2C_SR1_OVR_FIELD))
 	{
-		MMIO_WriteField(&i2c->SR1, I2C_SR1_OVR_FIELD, I2C_SR1_OVR_WIDTH, 0);
-		ctx->byte_counter--;
-		I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_DATA);
+		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_OVR_FIELD, 1, 0);
 	}
 }
 

@@ -7,7 +7,7 @@
 
 #include <i2c.h>
 
-#define MAX_I2C_REQS (32)
+#define MAX_I2C_REQS (32) // Must be a power of two
 
 typedef struct
 {

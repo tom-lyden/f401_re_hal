@@ -27,9 +27,9 @@ bool SYSCFG_BindEXTILine(exti_line_t line, gpio_port_t port)
 	volatile syscfg_t* syscfg = SYSCFG_BASE;
 
 	uint32_t line_reg = LINE_REGISTER(line);
-	uint32_t line_offset = LINE_INDEX(line);
+	uint32_t line_offset = LINE_INDEX(line) * EXTI_LINE_FIELD_WIDTH;
 
-	MMIO_WriteField(&syscfg->EXTICR[line_reg], line_offset, EXTI_LINE_FIELD_WIDTH, port);
+	MMIO_WriteBitsRMW(&syscfg->EXTICR[line_reg], line_offset, EXTI_LINE_FIELD_WIDTH, port);
 
 	is_exti_line_occupied[line] = true;
 

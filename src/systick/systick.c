@@ -15,6 +15,9 @@ static volatile uint32_t counter = 0U;
 
 bool SysTick_Init(const systick_cfg_t* cfg)
 {
+	assert(cfg != NULL);
+	assert(cfg->tick_frequency_hz > 0U);
+	
 	uint32_t hclk = RCC_GetHCLK();
 
 	switch (cfg->clk_src)
@@ -36,13 +39,13 @@ bool SysTick_Init(const systick_cfg_t* cfg)
 	volatile systick_t* systick = SYSTICK_BASE;
 
 	uint32_t reload = period_cycles - 1;
-	MMIO_WriteField(&systick->LOAD, 0, SYSTICK_COUNTER_WIDTH, reload);
+	MMIO_WriteBitsRMW(&systick->LOAD, 0, SYSTICK_COUNTER_WIDTH, reload);
 
 	systick->VAL = 0U;
 
-	MMIO_WriteField(&systick->CTRL, SYSTICK_CTRL_TICKINT_OFFSET, 1, cfg->enable_irq);
-	MMIO_WriteField(&systick->CTRL, SYSTICK_CTRL_CLKSOURCE_OFFSET, 1, cfg->clk_src);
-	MMIO_WriteField(&systick->CTRL, SYSTICK_CTRL_ENABLE_OFFSET, 1, cfg->enable_counter);
+	MMIO_WriteBitsRMW(&systick->CTRL, SYSTICK_CTRL_TICKINT_OFFSET, 1, cfg->enable_irq);
+	MMIO_WriteBitsRMW(&systick->CTRL, SYSTICK_CTRL_CLKSOURCE_OFFSET, 1, cfg->clk_src);
+	MMIO_WriteBitsRMW(&systick->CTRL, SYSTICK_CTRL_ENABLE_OFFSET, 1, cfg->enable_counter);
 
 	return true;
 }
