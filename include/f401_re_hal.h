@@ -3,5 +3,6 @@
 
 #include <gpio/gpio.h>
 #include <systick/systick.h>
+#include <i2c/i2c.h>
 
 #endif // F401_RE_HAL_LIBRARY_H

@@ -52,7 +52,7 @@ typedef enum
 
 typedef enum
 {
-	I2C_BUS_REQ_NONE = 0,
+	I2C_BUS_REQ_QUEUED = 0,
 	I2C_BUS_REQ_IN_PROGRESS,
 	I2C_BUS_REQ_DONE,
 	I2C_BUS_REQ_ERROR,
@@ -85,12 +85,11 @@ typedef struct
 	uint32_t register_addr_length;
 	const uint8_t* data_buffer;
 	uint32_t data_length;
-	i2c_req_state_t state; // For reading only; updated by I2C driver
+	volatile i2c_req_state_t state; // For reading only; updated by I2C driver
 } i2c_req_t;
 
 void I2C_Init(const i2c_cfg_t* cfg);
 bool I2C_Write(i2c_bus_t bus, i2c_req_t* req);
-bool I2C_WriteRegister(i2c_bus_t bus, i2c_req_t* req);
 
 void I2C_Update(void);
 

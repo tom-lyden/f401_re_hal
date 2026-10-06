@@ -12,6 +12,9 @@ add_library(f401_re_hal STATIC
         src/nvic/nvic.c
         src/i2c/i2c.c
         src/i2c/i2c_internal.c
+        src/i2c/i2c_fsm.c
+        src/i2c/i2c_queue.c
+        src/i2c/i2c_fsm/i2c_fsm_ctrl_write.c
 )
 
 target_include_directories(f401_re_hal
@@ -27,5 +30,6 @@ target_include_directories(f401_re_hal
         include/exti
         include/syscfg
         include/nvic
-        include/i2c       
+        include/i2c
+        include/i2c/i2c_fsm
 )

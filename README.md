@@ -21,8 +21,21 @@ hardware-specific details out of application code.
 * Alternate-function selection
 * GPIO read, write and toggle
 * GPIO configuration locking
-* Memory-mapped peripheral register abstractions
 * Interrupt configuration through EXTI
+
+### I2C
+
+* Standard-mode and fast-mode clock configuration
+* 7-bit and 10-bit device addressing
+* Interrupt-driven write transactions
+* Queued transaction handling
+* Multi-byte address / prefix transmission
+* Multi-byte data transmission
+* ACK / NACK handling
+* Event and error interrupt handling
+* Transaction cleanup and recovery after failed transfers
+* Automatic GPIO alternate-function and open-drain configuration
+* Bus and alternate-function selection from configured SDA / SCL pins
 
 ### EXTI / SYSCFG
 
@@ -37,14 +50,15 @@ hardware-specific details out of application code.
 
 * Cortex-M4 interrupt enable support
 * IRQ-to-register and bit mapping
-* Integration with EXTI interrupt configuration
+* Integration with peripheral interrupt configuration
 
 ### RCC
 
 * GPIO peripheral clock enable
+* I2C peripheral clock enable
 * SYSCFG peripheral clock enable
-* HCLK frequency retrieval
-* AHB prescaler handling
+* HCLK and PCLK1 frequency retrieval
+* AHB and APB1 prescaler handling
 * HSI clock source support
 
 ### SysTick
@@ -72,21 +86,35 @@ Current hardware validation includes:
 * SYSCFG EXTI routing
 * NVIC interrupt delivery
 * EXTI callback dispatch
+* I2C START and STOP generation
+* 7-bit device addressing
+* 10-bit address header transmission
+* Multi-byte I2C writes
+* ACK and NACK detection
+* I2C error handling and transaction recovery
+* I2C bus traffic verification using a logic analyzer
+* Communication with an external I2C OLED display
 
 ## Design
 
 The project separates MCU-specific hardware access from application-level behavior.
 
-The HAL exposes hardware capabilities such as GPIO, interrupts, clock control and system timing. Higher-level drivers
-and board-specific components are intended to build on top of these primitives rather than becoming part of the HAL
-itself.
+The HAL exposes hardware capabilities such as GPIO, interrupts, clock control, system timing and I2C communication.
+Higher-level drivers and board-specific components are intended to build on top of these primitives rather than becoming
+part of the HAL itself.
 
 Peripheral and Cortex-M4 register blocks are accessed directly through their documented memory-mapped interfaces.
 
+I2C transfers are interrupt-driven and handled through an internal transaction state machine. Requests may contain
+address / prefix bytes followed by an arbitrary-length data buffer, while peripheral events and errors are handled
+asynchronously through the corresponding I2C interrupts.
+
 ## Status
 
-GPIO, RCC, SysTick, EXTI, SYSCFG and basic NVIC interrupt enable support are currently implemented and tested on
-hardware.
+GPIO, RCC, SysTick, EXTI, SYSCFG, basic NVIC support and interrupt-driven I2C write transactions are currently
+implemented and tested on hardware.
+
+I2C read transactions are not currently implemented.
 
 Additional peripheral abstractions will be added as required by future projects rather than implemented speculatively.
 
