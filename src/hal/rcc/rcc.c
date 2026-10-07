@@ -29,7 +29,7 @@ void RCC_EnableSYSCFG(void)
 {
 	volatile rcc_t* rcc = RCC_BASE;
 
-	MMIO_WriteBitsRMW(&rcc->APB1ENR, RCC_APB2EN_SYSCFG_OFFSET, 1, 1);
+	MMIO_WriteBitsRMW(&rcc->APB2ENR, RCC_APB2EN_SYSCFG_OFFSET, 1, 1);
 }
 
 uint32_t RCC_GetHCLK(void)

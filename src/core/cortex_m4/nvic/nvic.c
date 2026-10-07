@@ -7,6 +7,7 @@
 #include <mmio.h>
 
 #include <stdint.h>
+#include <assert.h>
 
 #define NVIC_REG(irq_n) ((irq_n) / (NUM_INTERRUPTS_PER_REG))
 #define NVIC_FIELD(irq_n) ((irq_n) % (NUM_INTERRUPTS_PER_REG))

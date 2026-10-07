@@ -8,6 +8,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <assert.h>
 
 #define SYSTICK_AHB_DIV(val) ((val) / 8)
 

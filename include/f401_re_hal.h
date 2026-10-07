@@ -2,7 +2,7 @@
 #define F401_RE_HAL_LIBRARY_H
 
 #include <gpio.h>
-#include <systick.h>
+#include <ticks.h>
 #include <i2c.h>
 
 #endif // F401_RE_HAL_LIBRARY_H
