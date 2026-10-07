@@ -47,13 +47,13 @@ typedef enum
 typedef enum
 {
 	APB_DIV_1 = 0,
-	
+
 	// No division for any number 1-3
-	
-	APB_DIV_2   = 4,
-	APB_DIV_4   = 5,
-	APB_DIV_8   = 6,
-	APB_DIV_16  = 7,
+
+	APB_DIV_2  = 4,
+	APB_DIV_4  = 5,
+	APB_DIV_8  = 6,
+	APB_DIV_16 = 7,
 } apb_scaling_t;
 
 typedef struct

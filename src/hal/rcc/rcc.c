@@ -21,7 +21,7 @@ void RCC_EnableGPIO(rcc_en_gpio_port_t port)
 void RCC_EnableI2C(rcc_en_i2c_port_t port)
 {
 	volatile rcc_t* rcc = RCC_BASE;
-	
+
 	MMIO_WriteBitsRMW(&rcc->APB1ENR, port, 1, 1);
 }
 
@@ -58,11 +58,11 @@ uint32_t RCC_GetPCLK1(void)
 
 	volatile rcc_t* rcc = RCC_BASE;
 	uint32_t cfgr = rcc->CFGR;
-	
+
 	apb_scaling_t apb_scaling = MMIO_ReadBits(&cfgr, RCC_CFG_PPRE1_OFFSET, RCC_CFG_PPRE1_WIDTH);
-	
+
 	uint32_t pclk1 = scale_clk_apb(sysclk, apb_scaling);
-	
+
 	return pclk1;
 }
 

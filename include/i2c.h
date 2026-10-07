@@ -60,7 +60,7 @@ typedef enum
 
 typedef enum
 {
-	I2C_DEVICE_ADDRESS_7BIT = 7,
+	I2C_DEVICE_ADDRESS_7BIT  = 7,
 	I2C_DEVICE_ADDRESS_10BIT = 10,
 } i2c_device_address_type_t;
 

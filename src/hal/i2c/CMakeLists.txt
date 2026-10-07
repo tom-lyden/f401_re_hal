@@ -1,4 +1,4 @@
-﻿target_sources(f401_re_hal 
+﻿target_sources(f401_re_hal
         PRIVATE
         i2c_fsm/i2c_fsm_ctrl_write.c
         i2c_fsm.c
@@ -8,8 +8,7 @@
 )
 
 target_include_directories(f401_re_hal
-        PUBLIC
-        .
         PRIVATE
+        .
         i2c_fsm
 )

@@ -25,7 +25,7 @@ target_sources(f401_re_hal
         ${CMAKE_CURRENT_LIST_DIR}/src/device/stm32f401re_startup.c
 )
 
-set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/src/device/stm32f4xx_startup.c
+set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/src/device/stm32f401re_startup.c
         PROPERTIES COMPILE_OPTIONS "-fno-tree-loop-distribute-patterns;"
 )
 

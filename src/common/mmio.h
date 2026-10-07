@@ -17,7 +17,7 @@ static inline void MMIO_WriteBitsRMW(volatile uint32_t* reg, uint8_t offset, uin
 	assert(width <= REG_BITS);
 	assert(offset <= REG_BITS - width);
 	assert(value <= (1ULL << width) - 1);
-	
+
 	uint32_t mask = width == REG_BITS ? (uint32_t)(-1) : (1U << width) - 1;
 	uint32_t shift = width == REG_BITS ? 0 : offset;
 
@@ -33,11 +33,11 @@ static inline void MMIO_WriteBitsDirect(volatile uint32_t* reg, uint8_t offset, 
 	assert(width <= REG_BITS);
 	assert(offset <= REG_BITS - width);
 	assert(value <= (1ULL << width) - 1);
-	
+
 	uint32_t mask = width == REG_BITS ? (uint32_t)(-1) : (1U << width) - 1;
 	uint32_t shift = width == REG_BITS ? 0 : offset;
-	
-	*reg =  (value & mask) << shift;
+
+	*reg = (value & mask) << shift;
 }
 
 static inline uint32_t MMIO_ReadBits(volatile uint32_t* reg, uint8_t offset, uint8_t width)
@@ -45,7 +45,7 @@ static inline uint32_t MMIO_ReadBits(volatile uint32_t* reg, uint8_t offset, uin
 	assert(width > 0);
 	assert(width <= REG_BITS);
 	assert(offset <= REG_BITS - width);
-	
+
 	uint32_t mask = width == REG_BITS ? (uint32_t)(-1) : (1U << width) - 1;
 	uint32_t shift = width == REG_BITS ? 0 : offset;
 
