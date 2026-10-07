@@ -1,8 +1,8 @@
 #ifndef F401_RE_HAL_LIBRARY_H
 #define F401_RE_HAL_LIBRARY_H
 
-#include <gpio/gpio.h>
-#include <systick/systick.h>
-#include <i2c/i2c.h>
+#include <gpio.h>
+#include <systick.h>
+#include <i2c.h>
 
 #endif // F401_RE_HAL_LIBRARY_H

@@ -3,33 +3,21 @@ project(f401_re_hal C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_library(f401_re_hal STATIC
-        src/gpio/gpio.c
-        src/rcc/rcc.c
-        src/systick/systick.c
-        src/exti/exti.c
-        src/syscfg/syscfg.c
-        src/nvic/nvic.c
-        src/i2c/i2c.c
-        src/i2c/i2c_internal.c
-        src/i2c/i2c_fsm.c
-        src/i2c/i2c_queue.c
-        src/i2c/i2c_fsm/i2c_fsm_ctrl_write.c
-)
+add_library(f401_re_hal
+        src/hal/time/ticks.c
+        src/hal/time/ticks.h)
 
 target_include_directories(f401_re_hal
         PUBLIC
         include
-        device
+)
 
-        PRIVATE
-        include/gpio
-        include/mmio
-        include/rcc
-        include/systick
-        include/exti
-        include/syscfg
-        include/nvic
-        include/i2c
-        include/i2c/i2c_fsm
+add_subdirectory(src/common)
+add_subdirectory(src/core)
+add_subdirectory(src/device)
+add_subdirectory(src/hal)
+
+target_link_options(f401_re_hal
+        INTERFACE
+        "LINKER:-T,${CMAKE_CURRENT_LIST_DIR}/src/device/stm32f401re_flash.ld"
 )
