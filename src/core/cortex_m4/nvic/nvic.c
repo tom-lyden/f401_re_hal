@@ -15,7 +15,7 @@
 void NVIC_EnableInterrupt(uint8_t irq_n)
 {
 	assert(irq_n < NUM_INTERRUPTS);
-	
+
 	volatile nvic_regs_t* iser = NVIC_ISER_REGS;
 
 	uint8_t reg = NVIC_REG(irq_n);

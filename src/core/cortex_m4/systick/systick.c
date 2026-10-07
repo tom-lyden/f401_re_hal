@@ -7,6 +7,7 @@
 #include <mmio.h>
 
 #include <stdint.h>
+#include <stddef.h>
 #include <stdbool.h>
 #include <assert.h>
 
@@ -19,8 +20,10 @@ bool SysTick_Init(const systick_cfg_t* cfg)
 	assert(cfg != NULL);
 
 	uint32_t period_cycles = cfg->period_cycles;
-	systick_clk_src_t clk_src = period_cycles > SYSTICK_PERIOD_MAX_CYCLES ? SYSTICK_CLK_SRC_AHB_DIV_8 : SYSTICK_CLK_SRC_AHB;
-	
+	systick_clk_src_t clk_src = period_cycles > SYSTICK_PERIOD_MAX_CYCLES
+		? SYSTICK_CLK_SRC_AHB_DIV_8
+		: SYSTICK_CLK_SRC_AHB;
+
 	switch (clk_src)
 	{
 		case SYSTICK_CLK_SRC_AHB_DIV_8:
@@ -36,7 +39,7 @@ bool SysTick_Init(const systick_cfg_t* cfg)
 		return false;
 
 	handler = cfg->enable_irq ? cfg->irq_handler : NULL;
-	
+
 	volatile systick_t* systick = SYSTICK_BASE;
 
 	uint32_t reload = period_cycles - 1;

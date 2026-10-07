@@ -1,4 +1,4 @@
-﻿target_sources(f401_re_hal 
+﻿target_sources(f401_re_hal
         PRIVATE
         exti/exti.c
         gpio/gpio.c
@@ -8,11 +8,9 @@
 )
 
 target_include_directories(f401_re_hal
-        PUBLIC
-        gpio
-        time
-        
         PRIVATE
+        time
+        gpio
         exti
         rcc
         syscfg

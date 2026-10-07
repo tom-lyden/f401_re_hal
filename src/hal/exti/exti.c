@@ -104,28 +104,28 @@ static irq_t get_nvic_irq_number(exti_line_t line)
 	switch (line)
 	{
 		case EXTI_LINE_0:
-			return IRQ_EXTI_LINE_0;
+			return IRQ_EXTI0;
 		case EXTI_LINE_1:
-			return IRQ_EXTI_LINE_1;
+			return IRQ_EXTI1;
 		case EXTI_LINE_2:
-			return IRQ_EXTI_LINE_2;
+			return IRQ_EXTI2;
 		case EXTI_LINE_3:
-			return IRQ_EXTI_LINE_3;
+			return IRQ_EXTI3;
 		case EXTI_LINE_4:
-			return IRQ_EXTI_LINE_4;
+			return IRQ_EXTI4;
 		case EXTI_LINE_5:
 		case EXTI_LINE_6:
 		case EXTI_LINE_7:
 		case EXTI_LINE_8:
 		case EXTI_LINE_9:
-			return IRQ_EXTI_LINE_9_5;
+			return IRQ_EXTI9_5;
 		case EXTI_LINE_10:
 		case EXTI_LINE_11:
 		case EXTI_LINE_12:
 		case EXTI_LINE_13:
 		case EXTI_LINE_14:
 		case EXTI_LINE_15:
-			return IRQ_EXTI_LINE_15_10;
+			return IRQ_EXTI15_10;
 		default:
 			__builtin_unreachable();
 	}

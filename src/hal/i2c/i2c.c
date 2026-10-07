@@ -116,9 +116,6 @@ void I2C_Init(const i2c_cfg_t* cfg)
 
 bool I2C_Write(i2c_bus_t bus, i2c_req_t* req)
 {
-	if (!bus_ctrl[bus].is_initialized)
-		return false;
-	
 	if (req->device_address.type == I2C_DEVICE_ADDRESS_7BIT)
 		assert(req->device_address.address <= I2C_MAX_ADDRESS_VALUE_7BIT);
 	else if (req->device_address.type == I2C_DEVICE_ADDRESS_10BIT)
@@ -128,8 +125,11 @@ bool I2C_Write(i2c_bus_t bus, i2c_req_t* req)
 	
 	i2c_queue_t* queue = &bus_ctrl[bus].queue;
 	
-	if (!I2C_Queue_Enqueue(queue, req))
+	if (!bus_ctrl[bus].is_initialized || !I2C_Queue_Enqueue(queue, req))
+	{
+		req->state = I2C_BUS_REQ_ERROR;
 		return false;
+	}
 	
 	req->state = I2C_BUS_REQ_QUEUED;
 	
