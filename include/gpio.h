@@ -124,7 +124,12 @@ typedef struct
 void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_cfg_t* cfg);
 void GPIO_Lock(gpio_port_t port, uint32_t pin_mask);
 
+// Pins with the same number share one EXTI line across ports (PA0, PB0, ... all use line 0).
+// The first port to enable an interrupt on a line owns it: enabling from another port returns false
+// and leaves the owner untouched. The owner may call GPIO_EnableInterrupt again to change its trigger
+// or callback. GPIO_DisableInterrupt releases the line; it returns false if port/pin isn't the owner.
 bool GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interrupt_cfg_t* cfg);
+bool GPIO_DisableInterrupt(gpio_port_t port, gpio_pin_t pin);
 
 // Usage
 void GPIO_Write(gpio_port_t port, gpio_pin_t pin, gpio_state_t state);

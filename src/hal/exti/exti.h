@@ -44,5 +44,6 @@ typedef struct
 } exti_trigger_cfg_t;
 
 void EXTI_ConfigureInterrupt(const exti_trigger_cfg_t* cfg);
+void EXTI_DisableInterrupt(exti_line_t line);
 
 #endif // F401_RE_HAL_EXTI_H
