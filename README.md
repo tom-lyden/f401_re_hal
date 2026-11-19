@@ -39,7 +39,9 @@ hardware-specific details out of application code.
 
 ### EXTI / SYSCFG
 
-* GPIO-to-EXTI line routing through SYSCFG
+* GPIO-to-EXTI line routing through SYSCFG, with per-line ownership: the first port to claim a line owns it, and the
+  owner can reconfigure it in place
+* Interrupt release, so pins sharing a line (e.g. PA0 / PB0) can take turns at runtime
 * Rising-edge, falling-edge and dual-edge triggering
 * EXTI interrupt masking
 * Pending interrupt acknowledgement

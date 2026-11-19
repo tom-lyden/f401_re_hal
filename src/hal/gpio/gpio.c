@@ -67,6 +67,19 @@ bool GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interrupt
 	return true;
 }
 
+bool GPIO_DisableInterrupt(gpio_port_t port, gpio_pin_t pin)
+{
+	exti_line_t line = get_exti_line(pin);
+
+	// Ownership is checked before touching hardware, so a non-owner can't mask the owner's line
+	if (!SYSCFG_UnbindEXTILine(line, port))
+		return false;
+
+	EXTI_DisableInterrupt(line);
+
+	return true;
+}
+
 void GPIO_Write(gpio_port_t port, gpio_pin_t pin, gpio_state_t state)
 {
 	volatile gpio_t* gpio = GPIO_PORT_ADDR(port);

@@ -32,7 +32,7 @@ void EXTI_ConfigureInterrupt(const exti_trigger_cfg_t* cfg)
 	callbacks[cfg->line].callback_arg = cfg->callback_arg;
 	callbacks[cfg->line].callback = cfg->callback;
 
-	// Reset to allow reconfiguration in runtime
+	// Clear previous edges so the line's owner can reconfigure it in place
 	MMIO_WriteBitsRMW(&exti->RTSR, cfg->line, 1, 0);
 	MMIO_WriteBitsRMW(&exti->FTSR, cfg->line, 1, 0);
 
@@ -47,6 +47,22 @@ void EXTI_ConfigureInterrupt(const exti_trigger_cfg_t* cfg)
 	NVIC_EnableInterrupt(get_nvic_irq_number(cfg->line));
 
 	MMIO_WriteBitsRMW(&exti->IMR, cfg->line, 1, 1);
+}
+
+void EXTI_DisableInterrupt(exti_line_t line)
+{
+	volatile exti_t* exti = EXTI_BASE;
+
+	// Mask first so no interrupt fires mid-teardown. NVIC stays enabled: EXTI5-9 and EXTI10-15 share vectors.
+	MMIO_WriteBitsRMW(&exti->IMR, line, 1, 0);
+
+	MMIO_WriteBitsRMW(&exti->RTSR, line, 1, 0);
+	MMIO_WriteBitsRMW(&exti->FTSR, line, 1, 0);
+
+	MMIO_WriteBitsDirect(&exti->PR, line, 1, 1);
+
+	callbacks[line].callback = NULL;
+	callbacks[line].callback_arg = NULL;
 }
 
 void EXTI0_Handler(void)

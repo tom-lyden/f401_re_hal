@@ -16,12 +16,19 @@
 #define LINE_REGISTER(line) ((line) / (NUM_EXTI_LINES_PER_REGISTER))
 #define LINE_INDEX(line) ((line) % (NUM_EXTI_LINES_PER_REGISTER))
 
-static bool is_exti_line_occupied[NUM_EXTI_GPIO_LINES] = { false };
+typedef struct
+{
+	bool is_claimed;
+	gpio_port_t owner;
+} exti_line_owner_t;
+
+// Tracked in software: the EXTICR reset value (0) is also port A, so it can't tell "unclaimed" from "PA"
+static exti_line_owner_t line_owners[NUM_EXTI_GPIO_LINES];
 
 bool SYSCFG_BindEXTILine(exti_line_t line, gpio_port_t port)
 {
-	if (is_exti_line_occupied[line])
-		return false;
+	if (line_owners[line].is_claimed)
+		return line_owners[line].owner == port; // Owner keeps its routing; any other port is rejected
 
 	RCC_EnableSYSCFG();
 
@@ -32,7 +39,18 @@ bool SYSCFG_BindEXTILine(exti_line_t line, gpio_port_t port)
 
 	MMIO_WriteBitsRMW(&syscfg->EXTICR[line_reg], line_offset, EXTI_LINE_FIELD_WIDTH, port);
 
-	is_exti_line_occupied[line] = true;
+	line_owners[line].is_claimed = true;
+	line_owners[line].owner = port;
+
+	return true;
+}
+
+bool SYSCFG_UnbindEXTILine(exti_line_t line, gpio_port_t port)
+{
+	if (!line_owners[line].is_claimed || line_owners[line].owner != port)
+		return false;
+
+	line_owners[line].is_claimed = false; // EXTICR routing is left as is; the next bind overwrites it
 
 	return true;
 }
