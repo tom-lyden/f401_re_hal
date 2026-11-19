@@ -78,16 +78,16 @@ void I2C_Init(const i2c_cfg_t* cfg)
 		assert(false);
 	}
 	
-	i2c_gpio_cfg_t i2c_gpio_cfg = I2C_Build_GPIO_Config(cfg->sda_pin, cfg->scl_pin);
+	i2c_gpio_cfg_t i2c_gpio_cfg = I2C_BuildGPIOConfig(cfg->sda_pin, cfg->scl_pin);
 	
 	i2c_bus_t bus = i2c_gpio_cfg.bus;
 	
 	assert(!bus_ctrl[bus].is_initialized);
 	
-	rcc_en_i2c_port_t rcc_en = I2C_RCC_EN_By_I2C(bus);
+	rcc_en_i2c_port_t rcc_en = I2C_GetRCCPort(bus);
 	RCC_EnableI2C(rcc_en);
 	
-	gpio_config_t gpio_config = 
+	gpio_cfg_t gpio_config = 
 	{
 		.mode = GPIO_MODE_ALTERNATE,
 		.type = GPIO_TYPE_OPEN_DRAIN,
@@ -318,7 +318,7 @@ static void handle_event(i2c_bus_t bus)
 	if (!bus_ctrl[bus].is_initialized)
 		return;
 	
-	I2C_FSM_Handle_Event(&bus_ctrl[bus].fsm);
+	I2C_FSM_HandleEvent(&bus_ctrl[bus].fsm);
 }
 
 static void handle_error(i2c_bus_t bus)
@@ -326,5 +326,5 @@ static void handle_error(i2c_bus_t bus)
 	if (!bus_ctrl[bus].is_initialized)
 		return;
 	
-	I2C_FSM_Handle_Error(&bus_ctrl[bus].fsm);
+	I2C_FSM_HandleError(&bus_ctrl[bus].fsm);
 }

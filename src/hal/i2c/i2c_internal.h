@@ -86,7 +86,7 @@ typedef struct
 	gpio_af_t scl_af;
 } i2c_gpio_cfg_t;
 
-i2c_gpio_cfg_t I2C_Build_GPIO_Config(i2c_sda_pin_t sda, i2c_scl_pin_t scl);
-rcc_en_i2c_port_t I2C_RCC_EN_By_I2C(i2c_bus_t bus);
+i2c_gpio_cfg_t I2C_BuildGPIOConfig(i2c_sda_pin_t sda, i2c_scl_pin_t scl);
+rcc_en_i2c_port_t I2C_GetRCCPort(i2c_bus_t bus);
 
 #endif // F401_RE_HAL_I2C_INTERNAL_H

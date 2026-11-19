@@ -95,7 +95,7 @@ static const i2c_pin_data_t scl_pin_data[I2C_SCL_NUM_PINS] =
 	},
 };
 
-i2c_gpio_cfg_t I2C_Build_GPIO_Config(i2c_sda_pin_t sda, i2c_scl_pin_t scl)
+i2c_gpio_cfg_t I2C_BuildGPIOConfig(i2c_sda_pin_t sda, i2c_scl_pin_t scl)
 {
 	assert(sda < I2C_SDA_NUM_PINS && scl < I2C_SCL_NUM_PINS);
 	
@@ -118,7 +118,7 @@ i2c_gpio_cfg_t I2C_Build_GPIO_Config(i2c_sda_pin_t sda, i2c_scl_pin_t scl)
 	return result;
 }
 
-rcc_en_i2c_port_t I2C_RCC_EN_By_I2C(i2c_bus_t bus)
+rcc_en_i2c_port_t I2C_GetRCCPort(i2c_bus_t bus)
 {
 	switch (bus)
 	{

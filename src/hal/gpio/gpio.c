@@ -22,7 +22,7 @@ static rcc_en_gpio_port_t get_rcc_port(gpio_port_t port);
 static exti_line_t get_exti_line(gpio_pin_t pin);
 static exti_trigger_type_t get_exti_trigger_type(gpio_interrupt_type_t type);
 
-void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_config_t* cfg)
+void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_cfg_t* cfg)
 {
 	rcc_en_gpio_port_t rcc_port = get_rcc_port(port);
 	RCC_EnableGPIO(rcc_port);

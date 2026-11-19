@@ -29,13 +29,13 @@ typedef struct
 	uint32_t byte_counter;
 } i2c_callback_ctx_t;
 
-typedef void (*i2c_fsm_callback_t)(i2c_callback_ctx_t *);
+typedef void i2c_fsm_callback_t(i2c_callback_ctx_t*);
 
 typedef struct 
 {
-	i2c_fsm_callback_t enter;
-	i2c_fsm_callback_t handle_evt;
-	i2c_fsm_callback_t update;
+	i2c_fsm_callback_t* enter;
+	i2c_fsm_callback_t* handle_evt;
+	i2c_fsm_callback_t* update;
 } i2c_fsm_state_callbacks_t;
 
 typedef struct i2c_fsm_s
@@ -48,7 +48,7 @@ typedef struct i2c_fsm_s
 void I2C_FSM_Init(i2c_fsm_t* fsm, const i2c_fsm_state_callbacks_t* callbacks, i2c_callback_ctx_t ctx);
 void I2C_FSM_SetState(i2c_fsm_t* fsm, i2c_fsm_state_t state);
 void I2C_FSM_Update(i2c_fsm_t* fsm);
-void I2C_FSM_Handle_Event(i2c_fsm_t* fsm);
-void I2C_FSM_Handle_Error(i2c_fsm_t* fsm);
+void I2C_FSM_HandleEvent(i2c_fsm_t* fsm);
+void I2C_FSM_HandleError(i2c_fsm_t* fsm);
 
 #endif // F401_RE_HAL_I2C_FSM_H
