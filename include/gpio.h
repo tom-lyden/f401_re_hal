@@ -111,7 +111,7 @@ typedef struct
 	gpio_speed_t ospeed;
 	gpio_pupd_t pupd;
 	gpio_af_t af;
-} gpio_config_t;
+} gpio_cfg_t;
 
 typedef struct
 {
@@ -121,7 +121,7 @@ typedef struct
 } gpio_interrupt_cfg_t;
 
 // Configuration
-void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_config_t* cfg);
+void GPIO_Init(gpio_port_t port, gpio_pin_t pin, const gpio_cfg_t* cfg);
 void GPIO_Lock(gpio_port_t port, uint32_t pin_mask);
 
 bool GPIO_EnableInterrupt(gpio_port_t port, gpio_pin_t pin, const gpio_interrupt_cfg_t* cfg);

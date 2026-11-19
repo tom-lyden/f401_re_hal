@@ -22,12 +22,12 @@ void I2C_FSM_Update(i2c_fsm_t* fsm)
 	fsm->callbacks[fsm->state].update(&fsm->ctx);
 }
 
-void I2C_FSM_Handle_Event(i2c_fsm_t* fsm)
+void I2C_FSM_HandleEvent(i2c_fsm_t* fsm)
 {
 	fsm->callbacks[fsm->state].handle_evt(&fsm->ctx);
 }
 
-void I2C_FSM_Handle_Error(i2c_fsm_t* fsm)
+void I2C_FSM_HandleError(i2c_fsm_t* fsm)
 {
 	I2C_FSM_SetState(fsm, I2C_FSM_STATE_ERROR);
 }

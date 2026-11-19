@@ -13,7 +13,7 @@
 
 #define SYSTICK_AHB_DIV(val) ((val) / 8)
 
-static systick_handler_t handler = NULL;
+static systick_handler_t* handler = NULL;
 
 bool SysTick_Init(const systick_cfg_t* cfg)
 {

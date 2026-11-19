@@ -8,12 +8,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef void (*systick_handler_t)(void);
+typedef void systick_handler_t(void);
 
 typedef struct
 {
 	uint32_t period_cycles;
-	systick_handler_t irq_handler;
+	systick_handler_t* irq_handler;
 	bool enable_irq;
 } systick_cfg_t;
 

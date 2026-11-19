@@ -16,37 +16,27 @@
 
 #define I2C_PORT_ADDR(port) ((volatile i2c_t *)((I2C_BASE_ADDR) + ((port) * (I2C_PORT_WIDTH))))
 
-#define I2C_CR1_EN_FIELD (0U)
-#define I2C_CR1_EN_WIDTH (1U)
-#define I2C_CR1_START_FIELD (8U)
-#define I2C_CR1_START_WIDTH (1U)
-#define I2C_CR1_STOP_FIELD (9U)
-#define I2C_CR1_STOP_WIDTH (1U)
+#define I2C_CR1_EN_OFFSET (0U)
+#define I2C_CR1_START_OFFSET (8U)
+#define I2C_CR1_STOP_OFFSET (9U)
 
-#define I2C_CR2_FREQ_FIELD (0U)
+#define I2C_CR2_FREQ_OFFSET (0U)
 #define I2C_CR2_FREQ_WIDTH (6U)
-#define I2C_CR2_ITERREN_FIELD (8U)
-#define I2C_CR2_ITERREN_WIDTH (1U)
-#define I2C_CR2_ITEVTEN_FIELD (9U)
-#define I2C_CR2_ITEVTEN_WIDTH (1U)
-#define I2C_CR2_ITBUFEN_FIELD (10U)
-#define I2C_CR2_ITBUFEN_WIDTH (1U)
+#define I2C_CR2_ITERREN_OFFSET (8U)
+#define I2C_CR2_ITEVTEN_OFFSET (9U)
+#define I2C_CR2_ITBUFEN_OFFSET (10U)
 
-#define I2C_SR1_ADDR_FIELD (1U)
-#define I2C_SR1_BTF_FIELD (2U)
-#define I2C_SR1_ADD10_FIELD (3U)
-#define I2C_SR1_TxE_FIELD (7U)
-#define I2C_SR1_BERR_FIELD (8U)
-#define I2C_SR1_BERR_WIDTH (1U)
-#define I2C_SR1_ARLO_FIELD (9U)
-#define I2C_SR1_ARLO_WIDTH (1U)
-#define I2C_SR1_AF_FIELD (10U)
-#define I2C_SR1_AF_WIDTH (1U)
-#define I2C_SR1_OVR_FIELD (11U)
-#define I2C_SR1_OVR_WIDTH (1U)
+#define I2C_SR1_ADDR_OFFSET (1U)
+#define I2C_SR1_BTF_OFFSET (2U)
+#define I2C_SR1_ADD10_OFFSET (3U)
+#define I2C_SR1_TxE_OFFSET (7U)
+#define I2C_SR1_BERR_OFFSET (8U)
+#define I2C_SR1_ARLO_OFFSET (9U)
+#define I2C_SR1_AF_OFFSET (10U)
+#define I2C_SR1_OVR_OFFSET (11U)
 
-#define I2C_CCR_MODE_FIELD (15U)
-#define I2C_CCR_DUTY_FIELD (14U)
+#define I2C_CCR_MODE_OFFSET (15U)
+#define I2C_CCR_DUTY_OFFSET (14U)
 #define I2C_CCR_VALUE_WIDTH (12U)
 #define I2C_CCR_WIDTH (16U)
 
@@ -96,7 +86,7 @@ typedef struct
 	gpio_af_t scl_af;
 } i2c_gpio_cfg_t;
 
-i2c_gpio_cfg_t I2C_Build_GPIO_Config(i2c_sda_pin_t sda, i2c_scl_pin_t scl);
-rcc_en_i2c_port_t I2C_RCC_EN_By_I2C(i2c_bus_t bus);
+i2c_gpio_cfg_t I2C_BuildGPIOConfig(i2c_sda_pin_t sda, i2c_scl_pin_t scl);
+rcc_en_i2c_port_t I2C_GetRCCPort(i2c_bus_t bus);
 
 #endif // F401_RE_HAL_I2C_INTERNAL_H
