@@ -108,10 +108,10 @@ void I2C_Init(const i2c_cfg_t* cfg)
 	bus_ctrl[bus].is_initialized = true;
 	
 	volatile i2c_t* i2c = I2C_PORT_ADDR(bus);
-	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_EN_FIELD, 1, 1);
+	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_EN_OFFSET, 1, 1);
 	
-	NVIC_EnableInterrupt(irqs_by_bus[bus][0]);
-	NVIC_EnableInterrupt(irqs_by_bus[bus][1]);
+	NVIC_EnableInterrupt(irqs_by_bus[bus][I2C_IRQ_TYPE_EV]);
+	NVIC_EnableInterrupt(irqs_by_bus[bus][I2C_IRQ_TYPE_ER]);
 }
 
 bool I2C_Write(i2c_bus_t bus, i2c_req_t* req)
@@ -176,16 +176,16 @@ static void configure_peripheral(i2c_bus_t bus, const i2c_cfg_t* cfg, uint32_t p
 {
 	volatile i2c_t* i2c = I2C_PORT_ADDR(bus);
 	
-	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_EN_FIELD, 1, 0);
+	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_EN_OFFSET, 1, 0);
 	
-	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_FREQ_FIELD, I2C_CR2_FREQ_WIDTH, freq);
-	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_ITERREN_FIELD, 1, 1);
-	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_ITEVTEN_FIELD, 1, 1);
-	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_ITBUFEN_FIELD, 1, 1);
+	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_FREQ_OFFSET, I2C_CR2_FREQ_WIDTH, freq);
+	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_ITERREN_OFFSET, 1, 1);
+	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_ITEVTEN_OFFSET, 1, 1);
+	MMIO_WriteBitsRMW(&i2c->CR2, I2C_CR2_ITBUFEN_OFFSET, 1, 1);
 	
 	uint32_t ccr =  calculate_ccr(cfg->clk_mode, cfg->clk_freq_hz, pclk1) |
-		(cfg->clk_mode != I2C_CLK_MODE_STANDARD) << I2C_CCR_MODE_FIELD |
-			(cfg->clk_mode == I2C_CLK_MODE_FAST_DC_16_9) << I2C_CCR_DUTY_FIELD;
+		(cfg->clk_mode != I2C_CLK_MODE_STANDARD) << I2C_CCR_MODE_OFFSET |
+			(cfg->clk_mode == I2C_CLK_MODE_FAST_DC_16_9) << I2C_CCR_DUTY_OFFSET;
 	
 	MMIO_WriteBitsDirect(&i2c->CCR, 0, I2C_CCR_WIDTH, ccr);
 	
@@ -238,7 +238,7 @@ static uint16_t calculate_ccr(i2c_clk_mode_t clk_mode, uint32_t clk_freq_hz, uin
 	
 	result += remainder ? 1 : 0;
 
-	assert(result <= MAX_VALUE_IN_WIDTH(I2C_CCR_WIDTH));
+	assert(result <= MAX_VALUE_IN_WIDTH(I2C_CCR_VALUE_WIDTH));
 	
 	if (clk_mode == I2C_CLK_MODE_STANDARD)
 	{

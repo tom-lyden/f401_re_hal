@@ -106,7 +106,7 @@ static void i2c_fsm_start_enter(i2c_callback_ctx_t* ctx)
 {
 	volatile i2c_t* i2c = I2C_PORT_ADDR(ctx->bus);
 
-	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_START_FIELD, 1, 1);
+	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_START_OFFSET, 1, 1);
 }
 
 static void i2c_fsm_start_handle_evt(i2c_callback_ctx_t* ctx)
@@ -134,12 +134,12 @@ static void i2c_fsm_addr_handle_evt(i2c_callback_ctx_t* ctx)
 	volatile i2c_t* i2c = I2C_PORT_ADDR(ctx->bus);
 	uint32_t sr1 = i2c->SR1;
 
-	if (READ_BIT(sr1, I2C_SR1_ADD10_FIELD))
+	if (READ_BIT(sr1, I2C_SR1_ADD10_OFFSET))
 	{
 		uint8_t byte = EXTRACT_8BIT_ADDRESS(ctx->req->device_address.address);
 		i2c->DR = byte;
 	}
-	else if (READ_BIT(sr1, I2C_SR1_ADDR_FIELD))
+	else if (READ_BIT(sr1, I2C_SR1_ADDR_OFFSET))
 	{
 		(void)i2c->SR2; // Clear ADDR to allow sending bytes
 		I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_DATA);
@@ -189,9 +189,9 @@ static void i2c_fsm_data_handle_evt(i2c_callback_ctx_t* ctx)
 
 	uint32_t total_bytes = ctx->req->register_addr_length + ctx->req->data_length;
 
-	if (READ_BIT(sr1, I2C_SR1_TxE_FIELD) && ctx->byte_counter < total_bytes)
+	if (READ_BIT(sr1, I2C_SR1_TxE_OFFSET) && ctx->byte_counter < total_bytes)
 		write_next_byte(ctx);
-	else if (READ_BIT(sr1, I2C_SR1_BTF_FIELD) && ctx->byte_counter >= total_bytes)
+	else if (READ_BIT(sr1, I2C_SR1_BTF_OFFSET) && ctx->byte_counter >= total_bytes)
 		I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_STOP);
 }
 
@@ -203,7 +203,7 @@ static void i2c_fsm_data_update(i2c_callback_ctx_t* ctx)
 static void i2c_fsm_stop_enter(i2c_callback_ctx_t* ctx)
 {
 	volatile i2c_t* i2c = I2C_PORT_ADDR(ctx->bus);
-	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_STOP_FIELD, 1, 1);
+	MMIO_WriteBitsRMW(&i2c->CR1, I2C_CR1_STOP_OFFSET, 1, 1);
 }
 
 static void i2c_fsm_stop_handle_evt(i2c_callback_ctx_t* ctx)
@@ -214,7 +214,7 @@ static void i2c_fsm_stop_handle_evt(i2c_callback_ctx_t* ctx)
 static void i2c_fsm_stop_update(i2c_callback_ctx_t* ctx)
 {
 	volatile i2c_t* i2c = I2C_PORT_ADDR(ctx->bus);
-	if (MMIO_ReadBits(&i2c->CR1, I2C_CR1_STOP_FIELD, 1))
+	if (MMIO_ReadBits(&i2c->CR1, I2C_CR1_STOP_OFFSET, 1))
 		return;
 
 	I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_DONE);
@@ -242,24 +242,24 @@ static void i2c_fsm_err_enter(i2c_callback_ctx_t* ctx)
 	volatile i2c_t* i2c = I2C_PORT_ADDR(ctx->bus);
 	uint32_t sr1 = i2c->SR1;
 
-	if (READ_BIT(sr1, I2C_SR1_BERR_FIELD))
+	if (READ_BIT(sr1, I2C_SR1_BERR_OFFSET))
 	{
-		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_BERR_FIELD, 1, 0);
+		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_BERR_OFFSET, 1, 0);
 		I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_DONE); // TODO: Recover appropriately
 	}
-	if (READ_BIT(sr1, I2C_SR1_ARLO_FIELD))
+	if (READ_BIT(sr1, I2C_SR1_ARLO_OFFSET))
 	{
-		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_ARLO_FIELD, 1, 0);
+		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_ARLO_OFFSET, 1, 0);
 		I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_DONE); // TODO: Recover appropriately
 	}
-	if (READ_BIT(sr1, I2C_SR1_AF_FIELD))
+	if (READ_BIT(sr1, I2C_SR1_AF_OFFSET))
 	{
-		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_AF_FIELD, 1, 0);
+		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_AF_OFFSET, 1, 0);
 		I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_STOP);
 	}
-	if (READ_BIT(sr1, I2C_SR1_OVR_FIELD))
+	if (READ_BIT(sr1, I2C_SR1_OVR_OFFSET))
 	{
-		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_OVR_FIELD, 1, 0);
+		MMIO_WriteBitsRMW(&i2c->SR1, I2C_SR1_OVR_OFFSET, 1, 0);
 		I2C_FSM_SetState(ctx->fsm, I2C_FSM_STATE_DONE); // TODO: Recover appropriately
 	}
 }
